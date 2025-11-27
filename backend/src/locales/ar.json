@@ -1,0 +1,139 @@
+{
+  "auth": {
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "loginFailed": "بيانات الاعتماد غير صالحة",
+    "emailNotVerified": "البريد الإلكتروني غير مُفعّل. يرجى التحقق من صندوق الوارد.",
+    "userRegistered": "تم تسجيل المستخدم. يرجى التحقق من بريدك الإلكتروني.",
+    "emailAlreadyRegistered": "البريد الإلكتروني مسجل بالفعل",
+    "passwordResetSent": "إذا كان البريد موجوداً، فقد تم إرسال رابط إعادة التعيين.",
+    "passwordResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح. يمكنك تسجيل الدخول الآن.",
+    "invalidToken": "رمز غير صالح أو منتهي الصلاحية",
+    "logoutSuccess": "تم تسجيل الخروج بنجاح"
+  },
+  "product": {
+    "created": "تم إنشاء المنتج بنجاح",
+    "updated": "تم تحديث المنتج بنجاح",
+    "deleted": "تم حذف المنتج بنجاح",
+    "notFound": "المنتج غير موجود",
+    "outOfStock": "المنتج غير متوفر في المخزون",
+    "lowStock": "فقط {{count}} قطعة متبقية في المخزون"
+  },
+  "cart": {
+    "added": "تمت إضافة العنصر إلى السلة",
+    "updated": "تم تحديث السلة بنجاح",
+    "removed": "تم إزالة العنصر من السلة",
+    "cleared": "تم إفراغ السلة",
+    "empty": "السلة فارغة",
+    "couponApplied": "تم تطبيق القسيمة بنجاح",
+    "couponRemoved": "تم إزالة القسيمة",
+    "couponInvalid": "رمز القسيمة غير صالح أو منتهي الصلاحية"
+  },
+  "order": {
+    "created": "تم تقديم الطلب بنجاح",
+    "notFound": "الطلب غير موجود",
+    "cancelledSuccess": "تم إلغاء الطلب بنجاح",
+    "cannotCancel": "لا يمكن إلغاء الطلب",
+    "refundProcessed": "تمت معالجة الاسترداد بنجاح",
+    "statusUpdated": "تم تحديث حالة الطلب",
+    "statusPending": "قيد الانتظار",
+    "statusPaid": "مدفوع",
+    "statusShipped": "تم الشحن",
+    "statusDelivered": "تم التوصيل",
+    "statusCancelled": "ملغى"
+  },
+  "review": {
+    "created": "تم إرسال التقييم بنجاح",
+    "updated": "تم تحديث التقييم بنجاح",
+    "deleted": "تم حذف التقييم بنجاح",
+    "alreadyReviewed": "لقد قمت بالفعل بتقييم هذا المنتج",
+    "approved": "تمت الموافقة على التقييم",
+    "rejected": "تم رفض التقييم",
+    "flagged": "تم وضع علامة على التقييم للمراجعة",
+    "pending": "تقييمك في انتظار المراجعة"
+  },
+  "payment": {
+    "success": "تم الدفع بنجاح",
+    "failed": "فشل الدفع",
+    "processing": "جارٍ معالجة الدفع",
+    "refunded": "تم استرداد المبلغ"
+  },
+  "user": {
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح",
+    "addressAdded": "تمت إضافة العنوان بنجاح",
+    "addressUpdated": "تم تحديث العنوان بنجاح",
+    "addressDeleted": "تم حذف العنوان بنجاح"
+  },
+  "inventory": {
+    "stockAdded": "تمت إضافة المخزون بنجاح",
+    "stockUpdated": "تم تحديث المخزون بنجاح",
+    "lowStockAlert": "تنبيه: مخزون منخفض لـ {{productName}}",
+    "outOfStockAlert": "تنبيه: نفاد المخزون لـ {{productName}}"
+  },
+  "coupon": {
+    "created": "تم إنشاء القسيمة بنجاح",
+    "updated": "تم تحديث القسيمة بنجاح",
+    "deleted": "تم حذف القسيمة بنجاح",
+    "expired": "انتهت صلاحية القسيمة",
+    "limitReached": "تم الوصول إلى حد استخدام القسيمة",
+    "minimumNotMet": "لم يتم الوصول إلى الحد الأدنى لقيمة الطلب"
+  },
+  "vendor": {
+    "registered": "تم تسجيل البائع بنجاح",
+    "productCreated": "تم إدراج المنتج بنجاح",
+    "orderReceived": "تم استلام طلب جديد",
+    "payoutRequested": "تم طلب الدفع بنجاح"
+  },
+  "loyalty": {
+    "pointsEarned": "لقد ربحت {{points}} نقطة ولاء!",
+    "rewardRedeemed": "تم استبدال المكافأة بنجاح",
+    "tierUpgraded": "تهانينا! تمت ترقيتك إلى مستوى {{tier}}",
+    "referralSuccess": "نجحت الإحالة! لقد ربحت {{points}} نقطة"
+  },
+  "error": {
+    "serverError": "خطأ في الخادم. يرجى المحاولة لاحقاً.",
+    "notFound": "المورد غير موجود",
+    "unauthorized": "غير مصرح. يرجى تسجيل الدخول.",
+    "forbidden": "الوصول محظور",
+    "validationError": "خطأ في التحقق",
+    "invalidInput": "تم تقديم إدخال غير صالح",
+    "rateLimitExceeded": "طلبات كثيرة جداً. يرجى المحاولة لاحقاً."
+  },
+  "common": {
+    "success": "نجح",
+    "failed": "فشل",
+    "loading": "جارٍ التحميل...",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "page": "صفحة {{page}} من {{total}}",
+    "items": "{{count}} عنصر",
+    "items_plural": "{{count}} عناصر",
+    "total": "المجموع",
+    "subtotal": "المجموع الفرعي",
+    "discount": "خصم",
+    "shipping": "الشحن",
+    "tax": "الضريبة",
+    "currency": "SAR"
+  },
+  "email": {
+    "subject": {
+      "orderConfirmation": "تأكيد الطلب - #{{orderId}}",
+      "orderStatus": "تحديث حالة الطلب - #{{orderId}}",
+      "orderCancellation": "تم إلغاء الطلب - #{{orderId}}",
+      "passwordReset": "طلب إعادة تعيين كلمة المرور",
+      "welcome": "مرحباً بك في {{companyName}}!",
+      "reviewRequest": "كيف كانت تجربة الشراء؟",
+      "stockAlert": "تنبيه مخزون منخفض - {{productName}}"
+    },
+    "greeting": "مرحباً {{name}}",
+    "thankYou": "شكراً لطلبك!",
+    "orderPlaced": "لقد استلمنا طلبك ونحن نقوم بإعداده.",
+    "trackOrder": "تتبع طلبك",
+    "contactSupport": "اتصل بفريق الدعم لدينا",
+    "footer": {
+      "copyright": "© {{year}} {{companyName}}. جميع الحقوق محفوظة.",
+      "unsubscribe": "إلغاء الاشتراك في الرسائل"
+    }
+  }
+}

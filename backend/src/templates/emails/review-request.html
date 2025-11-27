@@ -1,0 +1,81 @@
+<h2>How Was Your Purchase? ⭐</h2>
+<p>Hi <strong>{{userName}}</strong>,</p>
+<p>
+  We hope you're enjoying your recent purchase! We'd love to hear your feedback.
+</p>
+
+<div class="order-details">
+  <h3 style="margin-top: 0; color: #2c3e50">Your Order</h3>
+  <table>
+    <tr>
+      <td>Order Number:</td>
+      <td><strong>#{{orderId}}</strong></td>
+    </tr>
+    <tr>
+      <td>Delivered On:</td>
+      <td>{{deliveryDate}}</td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">Products to Review</h3>
+  {{#each products}}
+  <div
+    style="
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      padding: 15px;
+      margin: 15px 0;
+      background-color: #fafafa;
+    "
+  >
+    <div style="display: flex; align-items: center">
+      <div style="flex: 1">
+        <strong style="font-size: 16px; color: #2c3e50">{{name}}</strong><br />
+        <span style="color: #777; font-size: 14px">{{category}}</span>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 15px">
+      <a
+        href="{{reviewUrl}}"
+        class="button"
+        style="font-size: 14px; padding: 10px 20px"
+        >Write a Review</a
+      >
+    </div>
+  </div>
+  {{/each}}
+</div>
+
+<div
+  class="highlight"
+  style="border-left-color: #f39c12; background-color: #fff9e6"
+>
+  <strong>⭐ Your Review Matters!</strong><br />
+  Help other shoppers make informed decisions. Share your honest feedback about
+  the product quality, shipping experience, and overall satisfaction.
+</div>
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">Why Leave a Review?</h3>
+  <ul style="color: #555; line-height: 1.8">
+    <li>📝 Help other customers make better decisions</li>
+    <li>💡 Share your experience and insights</li>
+    <li>🏆 Build your reviewer reputation</li>
+    <li>🎁 Unlock exclusive rewards (coming soon!)</li>
+  </ul>
+</div>
+
+<div style="text-align: center; margin: 30px 0">
+  <a href="{{orderUrl}}" class="button">Review All Products</a>
+</div>
+
+<p>
+  Reviews are one of the best ways to help us improve. We read every single one!
+</p>
+
+<p style="margin-top: 30px">
+  Thank you for your purchase,<br />
+  <strong>The Shopping Site Team</strong>
+</p>

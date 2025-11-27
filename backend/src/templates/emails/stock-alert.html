@@ -1,0 +1,114 @@
+<h2>Low Stock Alert ⚠️</h2>
+<p>Hi Admin,</p>
+<p>
+  This is an automated alert to notify you that the following product is running
+  low on stock.
+</p>
+
+<div
+  class="highlight"
+  style="border-left-color: #f39c12; background-color: #fff9e6"
+>
+  <strong>⚠️ Action Required</strong><br />
+  Please review and restock to avoid running out of inventory.
+</div>
+
+<div class="order-details">
+  <h3 style="margin-top: 0; color: #2c3e50">Product Information</h3>
+  <table>
+    <tr>
+      <td>Product Name:</td>
+      <td><strong>{{productName}}</strong></td>
+    </tr>
+    <tr>
+      <td>Product ID:</td>
+      <td>{{productId}}</td>
+    </tr>
+    {{#if variantSku}}
+    <tr>
+      <td>Variant SKU:</td>
+      <td>{{variantSku}}</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td>Current Stock:</td>
+      <td>
+        <strong style="color: #f39c12; font-size: 18px"
+          >{{currentStock}} units</strong
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>Threshold:</td>
+      <td>{{threshold}} units</td>
+    </tr>
+    <tr>
+      <td>Status:</td>
+      <td>
+        <span class="status-badge" style="background-color: #f39c12"
+          >Low Stock</span
+        >
+      </td>
+    </tr>
+  </table>
+</div>
+
+{{#if isOutOfStock}}
+<div
+  class="highlight"
+  style="border-left-color: #e74c3c; background-color: #ffebee"
+>
+  <strong>🚨 Out of Stock!</strong><br />
+  This product is currently out of stock. Customers cannot purchase it until
+  inventory is replenished.
+</div>
+{{/if}}
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">Recent Sales Activity</h3>
+  <ul style="color: #555; line-height: 1.8">
+    <li>Last 7 days: <strong>{{salesLast7Days}}</strong> units sold</li>
+    <li>Last 30 days: <strong>{{salesLast30Days}}</strong> units sold</li>
+    <li>Average daily sales: <strong>{{avgDailySales}}</strong> units</li>
+  </ul>
+</div>
+
+{{#if estimatedStockout}}
+<div
+  style="
+    background-color: #ffebee;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #e74c3c;
+    margin: 20px 0;
+  "
+>
+  <strong>📊 Estimated Stockout:</strong><br />
+  Based on current sales trends, this product may run out of stock in
+  approximately <strong>{{estimatedStockout}}</strong>.
+</div>
+{{/if}}
+
+<div style="text-align: center; margin: 30px 0">
+  <a href="{{inventoryUrl}}" class="button">Manage Inventory</a>
+  <a
+    href="{{productUrl}}"
+    class="button"
+    style="background-color: #95a5a6; margin-left: 10px"
+    >View Product</a
+  >
+</div>
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">Recommended Actions:</h3>
+  <ol style="color: #555; line-height: 1.8">
+    <li>Review supplier lead times</li>
+    <li>Place restock order immediately</li>
+    <li>Consider increasing safety stock levels</li>
+    <li>Update product availability status if needed</li>
+  </ol>
+</div>
+
+<p style="color: #777; font-size: 14px; margin-top: 30px">
+  This is an automated alert sent at {{alertTime}} on {{alertDate}}.
+</p>

@@ -1,0 +1,51 @@
+{
+  "vendor": {
+    "alreadyRegistered": "Mukoresi omukama aribuweho",
+    "registrationSuccess": "Okwibuka kwo kumara bulungi",
+    "notFound": "Omukama tezuibweho",
+    "profileUpdated": "Ebigambo bya profile yo birongeza",
+    "notVerified": "Omukama tezigamijwe",
+    "invalidAmount": "Omubare guta",
+    "insufficientBalance": "Tewali bakopi ebyenene",
+    "minimumPayout": "Omubare ogutono gwa {{amount}}",
+    "payoutRequested": "Okusaba kwa bakopi kumara bulungi",
+    "verificationUpdated": "Okwemera omukama kumara bulungi",
+    "invalidCommissionRate": "Ekiwendo ekiri hagati ya 0 na 100",
+    "commissionUpdated": "Ekiwendo ky'obusana birongeza"
+  },
+  "order": {
+    "notFound": "Oder tezuibweho",
+    "statusUpdated": "Embeera ya oder irongeza"
+  },
+  "error": {
+    "serverError": "Ensobi ya seriveri",
+    "forbidden": "Tewakirizibwa"
+  },
+  "auth": {
+    "invalidCredentials": "Ebigambo by'okutemera sibitukura",
+    "userNotFound": "Mukoresi tezuibweho",
+    "accountNotVerified": "Akaunta yo tezigamijwe",
+    "tokenExpired": "Akaseera ka token kaware",
+    "invalidToken": "Token si ntu"
+  },
+  "product": {
+    "notFound": "Ekintu tezuibweho",
+    "outOfStock": "Ekintu kiyita"
+  },
+  "cart": {
+    "itemAdded": "Ekintu kiherekerwa mu karugu",
+    "itemRemoved": "Ekintu kigwa mu karugu",
+    "updated": "Karugu kirongeza"
+  },
+  "payment": {
+    "success": "Okusasura kumara bulungi",
+    "failed": "Okusasura kugaana",
+    "pending": "Okusasura kirindirira"
+  },
+  "notifications": {
+    "orderConfirmation": "Oder ya yo iriziddwa",
+    "paymentConfirmation": "Okusasura kwo kwiriziddwa",
+    "orderShipped": "Oder ya yo erisiddwa",
+    "orderDelivered": "Oder ya yo erafuniddwa"
+  }
+}

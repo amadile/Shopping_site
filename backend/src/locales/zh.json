@@ -1,0 +1,139 @@
+{
+  "auth": {
+    "loginSuccess": "登录成功",
+    "loginFailed": "凭据无效",
+    "emailNotVerified": "邮箱未验证。请检查您的收件箱。",
+    "userRegistered": "用户已注册。请检查您的邮箱。",
+    "emailAlreadyRegistered": "邮箱已注册",
+    "passwordResetSent": "如果邮箱存在，重置链接已发送。",
+    "passwordResetSuccess": "密码重置成功。您现在可以登录。",
+    "invalidToken": "令牌无效或已过期",
+    "logoutSuccess": "退出成功"
+  },
+  "product": {
+    "created": "产品创建成功",
+    "updated": "产品更新成功",
+    "deleted": "产品删除成功",
+    "notFound": "产品未找到",
+    "outOfStock": "产品缺货",
+    "lowStock": "库存仅剩 {{count}} 件"
+  },
+  "cart": {
+    "added": "商品已添加到购物车",
+    "updated": "购物车更新成功",
+    "removed": "商品已从购物车移除",
+    "cleared": "购物车已清空",
+    "empty": "购物车为空",
+    "couponApplied": "优惠券应用成功",
+    "couponRemoved": "优惠券已移除",
+    "couponInvalid": "优惠券代码无效或已过期"
+  },
+  "order": {
+    "created": "订单提交成功",
+    "notFound": "订单未找到",
+    "cancelledSuccess": "订单取消成功",
+    "cannotCancel": "订单无法取消",
+    "refundProcessed": "退款处理成功",
+    "statusUpdated": "订单状态已更新",
+    "statusPending": "待处理",
+    "statusPaid": "已支付",
+    "statusShipped": "已发货",
+    "statusDelivered": "已送达",
+    "statusCancelled": "已取消"
+  },
+  "review": {
+    "created": "评价提交成功",
+    "updated": "评价更新成功",
+    "deleted": "评价删除成功",
+    "alreadyReviewed": "您已经评价过此产品",
+    "approved": "评价已批准",
+    "rejected": "评价已拒绝",
+    "flagged": "评价已标记待审核",
+    "pending": "您的评价正在审核中"
+  },
+  "payment": {
+    "success": "支付成功",
+    "failed": "支付失败",
+    "processing": "支付处理中",
+    "refunded": "支付已退款"
+  },
+  "user": {
+    "profileUpdated": "个人资料更新成功",
+    "passwordChanged": "密码更改成功",
+    "addressAdded": "地址添加成功",
+    "addressUpdated": "地址更新成功",
+    "addressDeleted": "地址删除成功"
+  },
+  "inventory": {
+    "stockAdded": "库存添加成功",
+    "stockUpdated": "库存更新成功",
+    "lowStockAlert": "{{productName}} 库存不足警告",
+    "outOfStockAlert": "{{productName}} 缺货警告"
+  },
+  "coupon": {
+    "created": "优惠券创建成功",
+    "updated": "优惠券更新成功",
+    "deleted": "优惠券删除成功",
+    "expired": "优惠券已过期",
+    "limitReached": "优惠券使用次数已达上限",
+    "minimumNotMet": "未达到最低订单金额"
+  },
+  "vendor": {
+    "registered": "卖家注册成功",
+    "productCreated": "产品上架成功",
+    "orderReceived": "收到新订单",
+    "payoutRequested": "支付请求提交成功"
+  },
+  "loyalty": {
+    "pointsEarned": "您获得了 {{points}} 积分！",
+    "rewardRedeemed": "奖励兑换成功",
+    "tierUpgraded": "恭喜！您已升级到 {{tier}} 等级",
+    "referralSuccess": "推荐成功！您获得了 {{points}} 积分"
+  },
+  "error": {
+    "serverError": "服务器错误。请稍后重试。",
+    "notFound": "资源未找到",
+    "unauthorized": "未授权。请登录。",
+    "forbidden": "访问被禁止",
+    "validationError": "验证错误",
+    "invalidInput": "提供的输入无效",
+    "rateLimitExceeded": "请求过多。请稍后重试。"
+  },
+  "common": {
+    "success": "成功",
+    "failed": "失败",
+    "loading": "加载中...",
+    "search": "搜索",
+    "filter": "筛选",
+    "sort": "排序",
+    "page": "第 {{page}} 页，共 {{total}} 页",
+    "items": "{{count}} 件商品",
+    "items_plural": "{{count}} 件商品",
+    "total": "总计",
+    "subtotal": "小计",
+    "discount": "折扣",
+    "shipping": "运费",
+    "tax": "税费",
+    "currency": "CNY"
+  },
+  "email": {
+    "subject": {
+      "orderConfirmation": "订单确认 - #{{orderId}}",
+      "orderStatus": "订单状态更新 - #{{orderId}}",
+      "orderCancellation": "订单已取消 - #{{orderId}}",
+      "passwordReset": "密码重置请求",
+      "welcome": "欢迎来到 {{companyName}}！",
+      "reviewRequest": "您的购物体验如何？",
+      "stockAlert": "库存不足警告 - {{productName}}"
+    },
+    "greeting": "您好 {{name}}",
+    "thankYou": "感谢您的订单！",
+    "orderPlaced": "我们已收到您的订单，正在准备中。",
+    "trackOrder": "跟踪您的订单",
+    "contactSupport": "联系我们的支持团队",
+    "footer": {
+      "copyright": "© {{year}} {{companyName}}。版权所有。",
+      "unsubscribe": "取消订阅邮件"
+    }
+  }
+}

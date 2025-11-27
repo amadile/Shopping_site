@@ -1,0 +1,84 @@
+<h2>Order Cancellation Confirmed ❌</h2>
+<p>Hi <strong>{{userName}}</strong>,</p>
+<p>Your order has been successfully cancelled as requested.</p>
+
+<div class="order-details">
+  <h3 style="margin-top: 0; color: #2c3e50">Cancelled Order Details</h3>
+  <table>
+    <tr>
+      <td>Order Number:</td>
+      <td><strong>#{{orderId}}</strong></td>
+    </tr>
+    <tr>
+      <td>Order Date:</td>
+      <td>{{orderDate}}</td>
+    </tr>
+    <tr>
+      <td>Cancellation Date:</td>
+      <td>{{cancellationDate}}</td>
+    </tr>
+    <tr>
+      <td>Status:</td>
+      <td><span class="status-badge status-cancelled">Cancelled</span></td>
+    </tr>
+    <tr>
+      <td>Order Total:</td>
+      <td><strong>${{total}}</strong></td>
+    </tr>
+  </table>
+</div>
+
+{{#if reason}}
+<div
+  style="
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+  "
+>
+  <strong>Cancellation Reason:</strong><br />
+  <p style="margin: 10px 0 0 0">{{reason}}</p>
+</div>
+{{/if}} {{#if refundAmount}}
+<div
+  class="highlight"
+  style="border-left-color: #27ae60; background-color: #f0fff4"
+>
+  <strong>💰 Refund Processing</strong><br />
+  A refund of <strong>${{refundAmount}}</strong> has been initiated and will be
+  processed within 5-7 business days.<br />
+  The refund will be credited to your original payment method.
+</div>
+{{/if}}
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">What Happens Next?</h3>
+  <ul style="color: #555">
+    <li>
+      {{#if refundAmount}}Your refund will be processed within 5-7 business
+      days{{else}}No charges were made to your account{{/if}}
+    </li>
+    <li>All items have been returned to inventory</li>
+    <li>You won't receive any further shipments for this order</li>
+  </ul>
+</div>
+
+<p>
+  We're sorry to see this order cancelled. If there was an issue with your
+  purchase or our service, we'd love to hear your feedback so we can improve.
+</p>
+
+<div style="text-align: center; margin: 30px 0">
+  <a href="{{shopUrl}}" class="button">Continue Shopping</a>
+</div>
+
+<p>
+  If you have any questions about this cancellation or your refund, please don't
+  hesitate to contact us.
+</p>
+
+<p style="margin-top: 30px">
+  Best regards,<br />
+  <strong>The Shopping Site Team</strong>
+</p>

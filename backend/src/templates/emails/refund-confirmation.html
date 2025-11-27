@@ -1,0 +1,78 @@
+<h2>Refund Confirmation 💵</h2>
+<p>Hi <strong>{{userName}}</strong>,</p>
+<p>Your refund has been processed successfully.</p>
+
+<div class="order-details">
+  <h3 style="margin-top: 0; color: #2c3e50">Refund Details</h3>
+  <table>
+    <tr>
+      <td>Order Number:</td>
+      <td><strong>#{{orderId}}</strong></td>
+    </tr>
+    <tr>
+      <td>Refund Amount:</td>
+      <td>
+        <strong style="font-size: 18px; color: #27ae60"
+          >${{refundAmount}}</strong
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>Refund Date:</td>
+      <td>{{refundDate}}</td>
+    </tr>
+    <tr>
+      <td>Refund Method:</td>
+      <td>{{refundMethod}}</td>
+    </tr>
+    <tr>
+      <td>Refund ID:</td>
+      <td>{{refundId}}</td>
+    </tr>
+  </table>
+</div>
+
+<div
+  class="highlight"
+  style="border-left-color: #27ae60; background-color: #f0fff4"
+>
+  <strong>✅ Refund Processed</strong><br />
+  Your refund of <strong>${{refundAmount}}</strong> has been successfully
+  processed and sent to your original payment method.
+</div>
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">When Will I Receive My Refund?</h3>
+  <p style="color: #555">
+    The refund has been initiated from our side. Depending on your payment
+    method and financial institution, it may take
+    <strong>5-7 business days</strong> for the funds to appear in your account.
+  </p>
+</div>
+
+{{#if items}}
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">Refunded Items</h3>
+  {{#each items}}
+  <div style="border-bottom: 1px solid #e0e0e0; padding: 10px 0">
+    <strong>{{name}}</strong> - Qty: {{quantity}} - ${{itemTotal}}
+  </div>
+  {{/each}}
+</div>
+{{/if}}
+
+<p>
+  If you don't see the refund in your account after 7 business days, please
+  check with your bank or contact us for assistance.
+</p>
+
+<div style="text-align: center; margin: 30px 0">
+  <a href="{{shopUrl}}" class="button">Continue Shopping</a>
+</div>
+
+<p>Thank you for your patience during this process.</p>
+
+<p style="margin-top: 30px">
+  Best regards,<br />
+  <strong>The Shopping Site Team</strong>
+</p>

@@ -1,0 +1,139 @@
+{
+  "auth": {
+    "loginSuccess": "Anmeldung erfolgreich",
+    "loginFailed": "Ungültige Anmeldedaten",
+    "emailNotVerified": "E-Mail nicht verifiziert. Bitte überprüfen Sie Ihren Posteingang.",
+    "userRegistered": "Benutzer registriert. Bitte überprüfen Sie Ihre E-Mail.",
+    "emailAlreadyRegistered": "E-Mail bereits registriert",
+    "passwordResetSent": "Falls die E-Mail existiert, wurde ein Zurücksetzungslink gesendet.",
+    "passwordResetSuccess": "Passwort erfolgreich zurückgesetzt. Sie können sich jetzt anmelden.",
+    "invalidToken": "Ungültiger oder abgelaufener Token",
+    "logoutSuccess": "Abmeldung erfolgreich"
+  },
+  "product": {
+    "created": "Produkt erfolgreich erstellt",
+    "updated": "Produkt erfolgreich aktualisiert",
+    "deleted": "Produkt erfolgreich gelöscht",
+    "notFound": "Produkt nicht gefunden",
+    "outOfStock": "Produkt nicht auf Lager",
+    "lowStock": "Nur noch {{count}} Artikel auf Lager"
+  },
+  "cart": {
+    "added": "Artikel zum Warenkorb hinzugefügt",
+    "updated": "Warenkorb erfolgreich aktualisiert",
+    "removed": "Artikel aus Warenkorb entfernt",
+    "cleared": "Warenkorb geleert",
+    "empty": "Warenkorb ist leer",
+    "couponApplied": "Gutschein erfolgreich angewendet",
+    "couponRemoved": "Gutschein entfernt",
+    "couponInvalid": "Ungültiger oder abgelaufener Gutscheincode"
+  },
+  "order": {
+    "created": "Bestellung erfolgreich aufgegeben",
+    "notFound": "Bestellung nicht gefunden",
+    "cancelledSuccess": "Bestellung erfolgreich storniert",
+    "cannotCancel": "Bestellung kann nicht storniert werden",
+    "refundProcessed": "Rückerstattung erfolgreich bearbeitet",
+    "statusUpdated": "Bestellstatus aktualisiert",
+    "statusPending": "Ausstehend",
+    "statusPaid": "Bezahlt",
+    "statusShipped": "Versendet",
+    "statusDelivered": "Zugestellt",
+    "statusCancelled": "Storniert"
+  },
+  "review": {
+    "created": "Bewertung erfolgreich eingereicht",
+    "updated": "Bewertung erfolgreich aktualisiert",
+    "deleted": "Bewertung erfolgreich gelöscht",
+    "alreadyReviewed": "Sie haben dieses Produkt bereits bewertet",
+    "approved": "Bewertung genehmigt",
+    "rejected": "Bewertung abgelehnt",
+    "flagged": "Bewertung zur Moderation markiert",
+    "pending": "Ihre Bewertung wartet auf Moderation"
+  },
+  "payment": {
+    "success": "Zahlung erfolgreich",
+    "failed": "Zahlung fehlgeschlagen",
+    "processing": "Zahlung wird bearbeitet",
+    "refunded": "Zahlung zurückerstattet"
+  },
+  "user": {
+    "profileUpdated": "Profil erfolgreich aktualisiert",
+    "passwordChanged": "Passwort erfolgreich geändert",
+    "addressAdded": "Adresse erfolgreich hinzugefügt",
+    "addressUpdated": "Adresse erfolgreich aktualisiert",
+    "addressDeleted": "Adresse erfolgreich gelöscht"
+  },
+  "inventory": {
+    "stockAdded": "Lagerbestand erfolgreich hinzugefügt",
+    "stockUpdated": "Lagerbestand erfolgreich aktualisiert",
+    "lowStockAlert": "Niedriger Lagerbestand für {{productName}}",
+    "outOfStockAlert": "Ausverkauft-Warnung für {{productName}}"
+  },
+  "coupon": {
+    "created": "Gutschein erfolgreich erstellt",
+    "updated": "Gutschein erfolgreich aktualisiert",
+    "deleted": "Gutschein erfolgreich gelöscht",
+    "expired": "Gutschein ist abgelaufen",
+    "limitReached": "Gutschein-Nutzungslimit erreicht",
+    "minimumNotMet": "Mindestbestellwert nicht erreicht"
+  },
+  "vendor": {
+    "registered": "Verkäufer erfolgreich registriert",
+    "productCreated": "Produkt erfolgreich gelistet",
+    "orderReceived": "Neue Bestellung erhalten",
+    "payoutRequested": "Auszahlung erfolgreich angefordert"
+  },
+  "loyalty": {
+    "pointsEarned": "Sie haben {{points}} Treuepunkte verdient!",
+    "rewardRedeemed": "Prämie erfolgreich eingelöst",
+    "tierUpgraded": "Herzlichen Glückwunsch! Sie wurden auf {{tier}}-Level befördert",
+    "referralSuccess": "Empfehlung erfolgreich! Sie haben {{points}} Punkte verdient"
+  },
+  "error": {
+    "serverError": "Serverfehler. Bitte versuchen Sie es später erneut.",
+    "notFound": "Ressource nicht gefunden",
+    "unauthorized": "Nicht autorisiert. Bitte melden Sie sich an.",
+    "forbidden": "Zugriff verweigert",
+    "validationError": "Validierungsfehler",
+    "invalidInput": "Ungültige Eingabe angegeben",
+    "rateLimitExceeded": "Zu viele Anfragen. Bitte versuchen Sie es später erneut."
+  },
+  "common": {
+    "success": "Erfolgreich",
+    "failed": "Fehlgeschlagen",
+    "loading": "Laden...",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "page": "Seite {{page}} von {{total}}",
+    "items": "{{count}} Artikel",
+    "items_plural": "{{count}} Artikel",
+    "total": "Gesamt",
+    "subtotal": "Zwischensumme",
+    "discount": "Rabatt",
+    "shipping": "Versand",
+    "tax": "MwSt.",
+    "currency": "EUR"
+  },
+  "email": {
+    "subject": {
+      "orderConfirmation": "Bestellbestätigung - #{{orderId}}",
+      "orderStatus": "Bestellstatus-Update - #{{orderId}}",
+      "orderCancellation": "Bestellung storniert - #{{orderId}}",
+      "passwordReset": "Anfrage zum Zurücksetzen des Passworts",
+      "welcome": "Willkommen bei {{companyName}}!",
+      "reviewRequest": "Wie war Ihr Einkauf?",
+      "stockAlert": "Niedriger Lagerbestand - {{productName}}"
+    },
+    "greeting": "Hallo {{name}}",
+    "thankYou": "Vielen Dank für Ihre Bestellung!",
+    "orderPlaced": "Wir haben Ihre Bestellung erhalten und bereiten sie vor.",
+    "trackOrder": "Verfolgen Sie Ihre Bestellung",
+    "contactSupport": "Kontaktieren Sie unser Support-Team",
+    "footer": {
+      "copyright": "© {{year}} {{companyName}}. Alle Rechte vorbehalten.",
+      "unsubscribe": "Von E-Mails abmelden"
+    }
+  }
+}

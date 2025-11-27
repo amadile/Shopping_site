@@ -1,0 +1,603 @@
+/* ========================================
+   PROFESSIONAL GLOBAL ANIMATIONS
+   Complete animation system for premium UX
+   ======================================== */
+
+/* === FADE ANIMATIONS === */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.fade-out {
+    animation: fadeOut 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* === BUTTON ANIMATIONS === */
+button,
+.btn,
+a.button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover,
+.btn:hover,
+a.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+button:active,
+.btn:active,
+a.button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Ripple effect for buttons */
+button::after,
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:active::after,
+.btn:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* === CARD ANIMATIONS === */
+.card,
+.product-card,
+.category-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.card:hover,
+.product-card:hover,
+.category-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Card image zoom on hover */
+.card img,
+.product-card img {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover img,
+.product-card:hover img {
+    transform: scale(1.1);
+}
+
+/* === IMAGE ANIMATIONS === */
+img {
+    transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
+}
+
+img:hover {
+    filter: brightness(1.05);
+}
+
+/* Lazy load fade in */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* === FORM ANIMATIONS === */
+input,
+textarea,
+select {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    transform: scale(1.02);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Label float animation */
+.form-group {
+    position: relative;
+}
+
+.form-group label {
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus+label,
+.form-group input:not(:placeholder-shown)+label {
+    transform: translateY(-25px) scale(0.85);
+    color: #3b82f6;
+}
+
+/* === MODAL ANIMATIONS === */
+.modal {
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-backdrop {
+    animation: backdropFadeIn 0.3s ease-out;
+}
+
+@keyframes backdropFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.5;
+    }
+}
+
+/* === DROPDOWN ANIMATIONS === */
+.dropdown-menu {
+    animation: dropdownSlide 0.3s ease-out;
+    transform-origin: top;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: scaleY(0.8) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scaleY(1) translateY(0);
+    }
+}
+
+/* === TOOLTIP ANIMATIONS === */
+.tooltip {
+    animation: tooltipFade 0.2s ease-out;
+}
+
+@keyframes tooltipFade {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* === NOTIFICATION/TOAST ANIMATIONS === */
+.notification,
+.toast {
+    animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification.exit,
+.toast.exit {
+    animation: slideOutRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* === LOADING ANIMATIONS === */
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dots-loading span {
+    animation: dotPulse 1.4s infinite ease-in-out;
+}
+
+.dots-loading span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.dots-loading span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes dotPulse {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* === PROGRESS BAR ANIMATION === */
+.progress-bar {
+    animation: progressFill 2s ease-out;
+}
+
+@keyframes progressFill {
+    from {
+        width: 0%;
+    }
+}
+
+/* === BADGE ANIMATIONS === */
+.badge,
+.tag {
+    animation: badgePop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes badgePop {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* === SKELETON LOADING === */
+.skeleton {
+    background: linear-gradient(90deg,
+            #f0f0f0 25%,
+            #e0e0e0 50%,
+            #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeletonLoading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonLoading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* === ACCORDION ANIMATIONS === */
+.accordion-content {
+    animation: accordionExpand 0.3s ease-out;
+    transform-origin: top;
+}
+
+@keyframes accordionExpand {
+    from {
+        opacity: 0;
+        max-height: 0;
+        transform: scaleY(0);
+    }
+
+    to {
+        opacity: 1;
+        max-height: 1000px;
+        transform: scaleY(1);
+    }
+}
+
+/* === TAB ANIMATIONS === */
+.tab-content {
+    animation: tabFade 0.4s ease-out;
+}
+
+@keyframes tabFade {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* === CART ANIMATIONS === */
+.cart-item {
+    animation: cartItemSlide 0.3s ease-out;
+}
+
+@keyframes cartItemSlide {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.cart-item.removing {
+    animation: cartItemRemove 0.4s ease-out forwards;
+}
+
+@keyframes cartItemRemove {
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+        max-height: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* === PRICE ANIMATIONS === */
+.price {
+    transition: all 0.3s ease;
+}
+
+.price.updating {
+    animation: priceUpdate 0.6s ease-out;
+}
+
+@keyframes priceUpdate {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+        color: #10b981;
+    }
+}
+
+/* === STAR RATING ANIMATIONS === */
+.star {
+    transition: all 0.2s ease;
+}
+
+.star:hover {
+    transform: scale(1.3) rotate(15deg);
+}
+
+.star.filled {
+    animation: starFill 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes starFill {
+    0% {
+        transform: scale(0) rotate(0deg);
+    }
+
+    50% {
+        transform: scale(1.3) rotate(180deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+/* === SEARCH BAR ANIMATIONS === */
+.search-bar {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-bar:focus-within {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.search-results {
+    animation: searchResultsSlide 0.3s ease-out;
+}
+
+@keyframes searchResultsSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === COUNTER ANIMATIONS === */
+.counter {
+    animation: counterIncrement 0.5s ease-out;
+}
+
+@keyframes counterIncrement {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* === ALERT ANIMATIONS === */
+.alert {
+    animation: alertSlideDown 0.4s ease-out;
+}
+
+@keyframes alertSlideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* === SMOOTH SCROLLING === */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Scroll reveal */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.6s ease-out;
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* === HOVER GLOW EFFECT === */
+.glow-on-hover {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.glow-on-hover::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+    filter: blur(10px);
+}
+
+.glow-on-hover:hover::before {
+    opacity: 1;
+    animation: glowRotate 2s linear infinite;
+}
+
+@keyframes glowRotate {
+    0% {
+        filter: blur(10px) hue-rotate(0deg);
+    }
+
+    100% {
+        filter: blur(10px) hue-rotate(360deg);
+    }
+}
+
+/* === PROFESSIONAL TRANSITIONS === */
+* {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Prevent layout shift */
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Performance optimization */
+.will-animate {
+    will-change: transform, opacity;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,139 @@
+{
+  "auth": {
+    "loginSuccess": "ログインに成功しました",
+    "loginFailed": "認証情報が無効です",
+    "emailNotVerified": "メールアドレスが確認されていません。受信トレイをご確認ください。",
+    "userRegistered": "ユーザー登録が完了しました。メールをご確認ください。",
+    "emailAlreadyRegistered": "このメールアドレスは既に登録されています",
+    "passwordResetSent": "メールアドレスが存在する場合、リセットリンクを送信しました。",
+    "passwordResetSuccess": "パスワードのリセットに成功しました。ログインできます。",
+    "invalidToken": "トークンが無効または期限切れです",
+    "logoutSuccess": "ログアウトしました"
+  },
+  "product": {
+    "created": "商品を作成しました",
+    "updated": "商品を更新しました",
+    "deleted": "商品を削除しました",
+    "notFound": "商品が見つかりません",
+    "outOfStock": "在庫切れです",
+    "lowStock": "在庫は残り{{count}}点です"
+  },
+  "cart": {
+    "added": "カートに商品を追加しました",
+    "updated": "カートを更新しました",
+    "removed": "カートから商品を削除しました",
+    "cleared": "カートを空にしました",
+    "empty": "カートは空です",
+    "couponApplied": "クーポンを適用しました",
+    "couponRemoved": "クーポンを削除しました",
+    "couponInvalid": "クーポンコードが無効または期限切れです"
+  },
+  "order": {
+    "created": "注文を確定しました",
+    "notFound": "注文が見つかりません",
+    "cancelledSuccess": "注文をキャンセルしました",
+    "cannotCancel": "注文をキャンセルできません",
+    "refundProcessed": "返金処理が完了しました",
+    "statusUpdated": "注文ステータスを更新しました",
+    "statusPending": "保留中",
+    "statusPaid": "支払済み",
+    "statusShipped": "発送済み",
+    "statusDelivered": "配達済み",
+    "statusCancelled": "キャンセル済み"
+  },
+  "review": {
+    "created": "レビューを投稿しました",
+    "updated": "レビューを更新しました",
+    "deleted": "レビューを削除しました",
+    "alreadyReviewed": "この商品は既にレビュー済みです",
+    "approved": "レビューが承認されました",
+    "rejected": "レビューが却下されました",
+    "flagged": "レビューが審査対象としてマークされました",
+    "pending": "レビューは審査待ちです"
+  },
+  "payment": {
+    "success": "支払いが完了しました",
+    "failed": "支払いに失敗しました",
+    "processing": "支払い処理中です",
+    "refunded": "支払いが返金されました"
+  },
+  "user": {
+    "profileUpdated": "プロフィールを更新しました",
+    "passwordChanged": "パスワードを変更しました",
+    "addressAdded": "住所を追加しました",
+    "addressUpdated": "住所を更新しました",
+    "addressDeleted": "住所を削除しました"
+  },
+  "inventory": {
+    "stockAdded": "在庫を追加しました",
+    "stockUpdated": "在庫を更新しました",
+    "lowStockAlert": "{{productName}}の在庫が少なくなっています",
+    "outOfStockAlert": "{{productName}}が在庫切れです"
+  },
+  "coupon": {
+    "created": "クーポンを作成しました",
+    "updated": "クーポンを更新しました",
+    "deleted": "クーポンを削除しました",
+    "expired": "クーポンの有効期限が切れています",
+    "limitReached": "クーポンの利用上限に達しました",
+    "minimumNotMet": "最低注文金額に達していません"
+  },
+  "vendor": {
+    "registered": "販売者登録が完了しました",
+    "productCreated": "商品を出品しました",
+    "orderReceived": "新しい注文を受け取りました",
+    "payoutRequested": "支払いリクエストを送信しました"
+  },
+  "loyalty": {
+    "pointsEarned": "{{points}}ポイントを獲得しました！",
+    "rewardRedeemed": "特典を引き換えました",
+    "tierUpgraded": "おめでとうございます！{{tier}}レベルに昇格しました",
+    "referralSuccess": "紹介が成功しました！{{points}}ポイントを獲得しました"
+  },
+  "error": {
+    "serverError": "サーバーエラーが発生しました。後でもう一度お試しください。",
+    "notFound": "リソースが見つかりません",
+    "unauthorized": "未認証です。ログインしてください。",
+    "forbidden": "アクセスが禁止されています",
+    "validationError": "検証エラー",
+    "invalidInput": "無効な入力が提供されました",
+    "rateLimitExceeded": "リクエストが多すぎます。後でもう一度お試しください。"
+  },
+  "common": {
+    "success": "成功",
+    "failed": "失敗",
+    "loading": "読み込み中...",
+    "search": "検索",
+    "filter": "フィルター",
+    "sort": "並べ替え",
+    "page": "{{total}}ページ中{{page}}ページ目",
+    "items": "{{count}}個の商品",
+    "items_plural": "{{count}}個の商品",
+    "total": "合計",
+    "subtotal": "小計",
+    "discount": "割引",
+    "shipping": "配送料",
+    "tax": "税",
+    "currency": "JPY"
+  },
+  "email": {
+    "subject": {
+      "orderConfirmation": "注文確認 - #{{orderId}}",
+      "orderStatus": "注文ステータス更新 - #{{orderId}}",
+      "orderCancellation": "注文キャンセル - #{{orderId}}",
+      "passwordReset": "パスワードリセットリクエスト",
+      "welcome": "{{companyName}}へようこそ！",
+      "reviewRequest": "購入はいかがでしたか？",
+      "stockAlert": "在庫少量アラート - {{productName}}"
+    },
+    "greeting": "{{name}}様",
+    "thankYou": "ご注文ありがとうございます！",
+    "orderPlaced": "ご注文を承りました。現在準備中です。",
+    "trackOrder": "注文を追跡する",
+    "contactSupport": "サポートチームに連絡する",
+    "footer": {
+      "copyright": "© {{year}} {{companyName}}. 全著作権所有。",
+      "unsubscribe": "メール配信を停止する"
+    }
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "auth": {
+    "loginSuccess": "Inicio de sesión exitoso",
+    "loginFailed": "Credenciales inválidas",
+    "emailNotVerified": "Correo electrónico no verificado. Por favor revisa tu bandeja de entrada.",
+    "userRegistered": "Usuario registrado. Por favor verifica tu correo electrónico.",
+    "emailAlreadyRegistered": "Correo electrónico ya registrado",
+    "passwordResetSent": "Si el correo existe, se ha enviado un enlace de restablecimiento.",
+    "passwordResetSuccess": "Restablecimiento de contraseña exitoso. Ahora puedes iniciar sesión.",
+    "invalidToken": "Token inválido o expirado",
+    "logoutSuccess": "Sesión cerrada exitosamente"
+  },
+  "product": {
+    "created": "Producto creado exitosamente",
+    "updated": "Producto actualizado exitosamente",
+    "deleted": "Producto eliminado exitosamente",
+    "notFound": "Producto no encontrado",
+    "outOfStock": "Producto agotado",
+    "lowStock": "Solo quedan {{count}} artículos en stock"
+  },
+  "cart": {
+    "added": "Artículo agregado al carrito",
+    "updated": "Carrito actualizado exitosamente",
+    "removed": "Artículo eliminado del carrito",
+    "cleared": "Carrito vaciado",
+    "empty": "El carrito está vacío",
+    "couponApplied": "Cupón aplicado exitosamente",
+    "couponRemoved": "Cupón eliminado",
+    "couponInvalid": "Código de cupón inválido o expirado"
+  },
+  "order": {
+    "created": "Pedido realizado exitosamente",
+    "notFound": "Pedido no encontrado",
+    "cancelledSuccess": "Pedido cancelado exitosamente",
+    "cannotCancel": "El pedido no puede ser cancelado",
+    "refundProcessed": "Reembolso procesado exitosamente",
+    "statusUpdated": "Estado del pedido actualizado",
+    "statusPending": "Pendiente",
+    "statusPaid": "Pagado",
+    "statusShipped": "Enviado",
+    "statusDelivered": "Entregado",
+    "statusCancelled": "Cancelado"
+  },
+  "review": {
+    "created": "Reseña enviada exitosamente",
+    "updated": "Reseña actualizada exitosamente",
+    "deleted": "Reseña eliminada exitosamente",
+    "alreadyReviewed": "Ya has reseñado este producto",
+    "approved": "Reseña aprobada",
+    "rejected": "Reseña rechazada",
+    "flagged": "Reseña marcada para moderación",
+    "pending": "Tu reseña está pendiente de moderación"
+  },
+  "payment": {
+    "success": "Pago exitoso",
+    "failed": "Pago fallido",
+    "processing": "El pago está siendo procesado",
+    "refunded": "Pago reembolsado"
+  },
+  "user": {
+    "profileUpdated": "Perfil actualizado exitosamente",
+    "passwordChanged": "Contraseña cambiada exitosamente",
+    "addressAdded": "Dirección agregada exitosamente",
+    "addressUpdated": "Dirección actualizada exitosamente",
+    "addressDeleted": "Dirección eliminada exitosamente"
+  },
+  "inventory": {
+    "stockAdded": "Stock agregado exitosamente",
+    "stockUpdated": "Stock actualizado exitosamente",
+    "lowStockAlert": "Alerta de stock bajo para {{productName}}",
+    "outOfStockAlert": "Alerta de stock agotado para {{productName}}"
+  },
+  "coupon": {
+    "created": "Cupón creado exitosamente",
+    "updated": "Cupón actualizado exitosamente",
+    "deleted": "Cupón eliminado exitosamente",
+    "expired": "El cupón ha expirado",
+    "limitReached": "Límite de uso del cupón alcanzado",
+    "minimumNotMet": "Valor mínimo de pedido no alcanzado"
+  },
+  "vendor": {
+    "registered": "Vendedor registrado exitosamente",
+    "productCreated": "Producto listado exitosamente",
+    "orderReceived": "Nuevo pedido recibido",
+    "payoutRequested": "Pago solicitado exitosamente"
+  },
+  "loyalty": {
+    "pointsEarned": "¡Has ganado {{points}} puntos de lealtad!",
+    "rewardRedeemed": "Recompensa canjeada exitosamente",
+    "tierUpgraded": "¡Felicitaciones! Has sido ascendido al nivel {{tier}}",
+    "referralSuccess": "¡Referido exitoso! Has ganado {{points}} puntos"
+  },
+  "error": {
+    "serverError": "Error del servidor. Por favor intenta más tarde.",
+    "notFound": "Recurso no encontrado",
+    "unauthorized": "No autorizado. Por favor inicia sesión.",
+    "forbidden": "Acceso prohibido",
+    "validationError": "Error de validación",
+    "invalidInput": "Entrada inválida proporcionada",
+    "rateLimitExceeded": "Demasiadas solicitudes. Por favor intenta más tarde."
+  },
+  "common": {
+    "success": "Éxito",
+    "failed": "Fallido",
+    "loading": "Cargando...",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "page": "Página {{page}} de {{total}}",
+    "items": "{{count}} artículo",
+    "items_plural": "{{count}} artículos",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "discount": "Descuento",
+    "shipping": "Envío",
+    "tax": "Impuesto",
+    "currency": "USD"
+  },
+  "email": {
+    "subject": {
+      "orderConfirmation": "Confirmación de Pedido - #{{orderId}}",
+      "orderStatus": "Actualización de Estado del Pedido - #{{orderId}}",
+      "orderCancellation": "Pedido Cancelado - #{{orderId}}",
+      "passwordReset": "Solicitud de Restablecimiento de Contraseña",
+      "welcome": "¡Bienvenido a {{companyName}}!",
+      "reviewRequest": "¿Cómo fue tu compra?",
+      "stockAlert": "Alerta de Stock Bajo - {{productName}}"
+    },
+    "greeting": "Hola {{name}}",
+    "thankYou": "¡Gracias por tu pedido!",
+    "orderPlaced": "Hemos recibido tu pedido y lo estamos preparando.",
+    "trackOrder": "Rastrear tu pedido",
+    "contactSupport": "Contactar a nuestro equipo de soporte",
+    "footer": {
+      "copyright": "© {{year}} {{companyName}}. Todos los derechos reservados.",
+      "unsubscribe": "Cancelar suscripción de correos"
+    }
+  }
+}

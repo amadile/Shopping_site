@@ -1,0 +1,51 @@
+{
+  "vendor": {
+    "alreadyRegistered": "Oyita wakati w'ekibiina",
+    "registrationSuccess": "Okwewandiisa ekibiina kuyise",
+    "notFound": "Ekibiina tezudde",
+    "profileUpdated": "Okwewandiisa ekibiina kusazzidwa",
+    "notVerified": "Ekibiina tezikiriziddwa",
+    "invalidAmount": "Ebbanga erimu",
+    "insufficientBalance": "Tewali bbuggu bwenyini",
+    "minimumPayout": "Ebbanga erisinga okusinga okuva ku {{amount}}",
+    "payoutRequested": "Okusaba kwe bbuggu kuyise",
+    "verificationUpdated": "Okukakasa ekibiina kusazzidwa",
+    "invalidCommissionRate": "Omuwendo gw'ekigabwa kagendera wakati ya 0 ne 100",
+    "commissionUpdated": "Omuwendo gw'ekigabwa gusazzidwa"
+  },
+  "order": {
+    "notFound": "Oder tezudde",
+    "statusUpdated": "Embeera ya oder esazzidwa"
+  },
+  "error": {
+    "serverError": "Ensobi ya server",
+    "forbidden": "Tekikkiriziddwa"
+  },
+  "auth": {
+    "invalidCredentials": "Emapeesa ga sirikirizza",
+    "userNotFound": "Mukozesa tezudde",
+    "accountNotVerified": "Akaunta yo tezikiriziddwa",
+    "tokenExpired": "Akaseera k'okukakasa kawedde",
+    "invalidToken": "Akakwasizo tekakiriziddwa"
+  },
+  "product": {
+    "notFound": "Ekintu tezudde",
+    "outOfStock": "Ekintu kiyita"
+  },
+  "cart": {
+    "itemAdded": "Ekintu kiyongerwa mu katandaala",
+    "itemRemoved": "Ekintu kiggidwa mu katandaala",
+    "updated": "Katandaala kisazzidwa"
+  },
+  "payment": {
+    "success": "Okusasula kuyise",
+    "failed": "Okusasula kugaanye",
+    "pending": "Okusasula kirindirira"
+  },
+  "notifications": {
+    "orderConfirmation": "Oder yo ekiriziddwa",
+    "paymentConfirmation": "Okusasula kwo ekiriziddwa",
+    "orderShipped": "Oder yo erisiddwa",
+    "orderDelivered": "Oder yo erifuniddwa"
+  }
+}

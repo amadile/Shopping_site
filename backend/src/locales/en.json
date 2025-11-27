@@ -1,0 +1,173 @@
+{
+  "auth": {
+    "loginSuccess": "Login successful",
+    "loginFailed": "Invalid credentials",
+    "emailNotVerified": "Email not verified. Please check your inbox.",
+    "userRegistered": "User registered. Please verify your email.",
+    "emailAlreadyRegistered": "Email already registered",
+    "passwordResetSent": "If the email exists, a reset link has been sent.",
+    "passwordResetSuccess": "Password reset successful. You can now log in.",
+    "invalidToken": "Invalid or expired token",
+    "logoutSuccess": "Logged out successfully"
+  },
+  "product": {
+    "created": "Product created successfully",
+    "updated": "Product updated successfully",
+    "deleted": "Product deleted successfully",
+    "notFound": "Product not found",
+    "outOfStock": "Product is out of stock",
+    "lowStock": "Only {{count}} items left in stock"
+  },
+  "cart": {
+    "added": "Item added to cart",
+    "updated": "Cart updated successfully",
+    "removed": "Item removed from cart",
+    "cleared": "Cart cleared",
+    "empty": "Cart is empty",
+    "couponApplied": "Coupon applied successfully",
+    "couponRemoved": "Coupon removed",
+    "couponInvalid": "Invalid or expired coupon code"
+  },
+  "order": {
+    "created": "Order placed successfully",
+    "notFound": "Order not found",
+    "cancelledSuccess": "Order cancelled successfully",
+    "cannotCancel": "Order cannot be cancelled",
+    "refundProcessed": "Refund processed successfully",
+    "statusUpdated": "Order status updated",
+    "statusPending": "Pending",
+    "statusPaid": "Paid",
+    "statusShipped": "Shipped",
+    "statusDelivered": "Delivered",
+    "statusCancelled": "Cancelled"
+  },
+  "review": {
+    "created": "Review submitted successfully",
+    "updated": "Review updated successfully",
+    "deleted": "Review deleted successfully",
+    "alreadyReviewed": "You have already reviewed this product",
+    "approved": "Review approved",
+    "rejected": "Review rejected",
+    "flagged": "Review flagged for moderation",
+    "pending": "Your review is pending moderation"
+  },
+  "payment": {
+    "success": "Payment successful",
+    "failed": "Payment failed",
+    "processing": "Payment is being processed",
+    "refunded": "Payment refunded"
+  },
+  "user": {
+    "profileUpdated": "Profile updated successfully",
+    "passwordChanged": "Password changed successfully",
+    "addressAdded": "Address added successfully",
+    "addressUpdated": "Address updated successfully",
+    "addressDeleted": "Address deleted successfully"
+  },
+  "inventory": {
+    "stockAdded": "Stock added successfully",
+    "stockUpdated": "Stock updated successfully",
+    "lowStockAlert": "Low stock alert for {{productName}}",
+    "outOfStockAlert": "Out of stock alert for {{productName}}"
+  },
+  "coupon": {
+    "created": "Coupon created successfully",
+    "updated": "Coupon updated successfully",
+    "deleted": "Coupon deleted successfully",
+    "expired": "Coupon has expired",
+    "limitReached": "Coupon usage limit reached",
+    "minimumNotMet": "Minimum order value not met"
+  },
+  "vendor": {
+    "registrationSuccess": "Vendor registration successful",
+    "alreadyRegistered": "You already have a vendor account",
+    "notFound": "Vendor not found",
+    "notVerified": "Vendor account not verified",
+    "profileUpdated": "Vendor profile updated successfully",
+    "productCreated": "Product listed successfully",
+    "orderReceived": "New order received",
+    "payoutRequested": "Payout requested successfully",
+    "insufficientBalance": "Insufficient payout balance",
+    "invalidAmount": "Invalid payout amount",
+    "minimumPayout": "Minimum payout amount is ${{amount}}",
+    "verificationUpdated": "Vendor verification status updated",
+    "commissionUpdated": "Commission rate updated successfully",
+    "invalidCommissionRate": "Commission rate must be between 0 and 100"
+  },
+  "payout": {
+    "notFound": "Payout not found",
+    "alreadyProcessed": "Payout already processed",
+    "alreadyCompleted": "Payout already completed",
+    "cannotFailCompleted": "Cannot mark completed payout as failed",
+    "transactionIdRequired": "Transaction ID is required",
+    "reasonRequired": "Failure reason is required",
+    "processing": "Payout is being processed",
+    "completed": "Payout completed successfully",
+    "failed": "Payout marked as failed"
+  },
+  "loyalty": {
+    "pointsEarned": "You earned {{points}} loyalty points!",
+    "rewardRedeemed": "Reward redeemed successfully",
+    "tierUpgraded": "Congratulations! You've been upgraded to {{tier}} tier",
+    "referralSuccess": "Referral successful! You earned {{points}} points",
+    "insufficientPoints": "Insufficient loyalty points",
+    "profileNotFound": "Loyalty profile not found",
+    "rewardNotAvailable": "Reward is not available",
+    "rewardNotFound": "Reward not found",
+    "referralCodeGenerated": "Referral code generated successfully",
+    "referralCodeInvalid": "Invalid referral code",
+    "redemptionLimitReached": "You've reached the redemption limit for this reward",
+    "minimumTierRequired": "Requires {{tier}} tier or higher",
+    "settingsUpdated": "Loyalty settings updated successfully",
+    "birthdayPointsAwarded": "Happy Birthday! You've been awarded {{points}} bonus points!",
+    "referralPending": "Your referral is pending completion",
+    "referralCompleted": "Your referral has been completed successfully!",
+    "pointsAdjusted": "Points balance adjusted"
+  },
+  "error": {
+    "serverError": "Server error. Please try again later.",
+    "notFound": "Resource not found",
+    "unauthorized": "Unauthorized. Please login.",
+    "forbidden": "Access forbidden",
+    "validationError": "Validation error",
+    "invalidInput": "Invalid input provided",
+    "rateLimitExceeded": "Too many requests. Please try again later."
+  },
+  "common": {
+    "success": "Success",
+    "failed": "Failed",
+    "loading": "Loading...",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "page": "Page {{page}} of {{total}}",
+    "items": "{{count}} item",
+    "items_plural": "{{count}} items",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "currency": "USD"
+  },
+  "email": {
+    "subject": {
+      "orderConfirmation": "Order Confirmation - #{{orderId}}",
+      "orderStatus": "Order Status Update - #{{orderId}}",
+      "orderCancellation": "Order Cancelled - #{{orderId}}",
+      "passwordReset": "Password Reset Request",
+      "welcome": "Welcome to {{companyName}}!",
+      "reviewRequest": "How was your purchase?",
+      "stockAlert": "Low Stock Alert - {{productName}}"
+    },
+    "greeting": "Hi {{name}}",
+    "thankYou": "Thank you for your order!",
+    "orderPlaced": "We've received your order and we're getting it ready.",
+    "trackOrder": "Track your order",
+    "contactSupport": "Contact our support team",
+    "footer": {
+      "copyright": "© {{year}} {{companyName}}. All rights reserved.",
+      "unsubscribe": "Unsubscribe from emails"
+    }
+  }
+}

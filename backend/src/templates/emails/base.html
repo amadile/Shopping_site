@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color: #f4f4f4;
+        line-height: 1.6;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+      }
+      .header {
+        background-color: #2c3e50;
+        color: #ffffff;
+        padding: 30px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 300;
+      }
+      .content {
+        padding: 40px 30px;
+        color: #333333;
+      }
+      .content h2 {
+        color: #2c3e50;
+        font-size: 24px;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+      .content p {
+        margin: 15px 0;
+        color: #555555;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 30px;
+        margin: 20px 0;
+        background-color: #3498db;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .button:hover {
+        background-color: #2980b9;
+      }
+      .order-details {
+        background-color: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 25px 0;
+      }
+      .order-details table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .order-details td {
+        padding: 8px 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .order-details td:first-child {
+        font-weight: bold;
+        color: #2c3e50;
+        width: 40%;
+      }
+      .order-details tr:last-child td {
+        border-bottom: none;
+      }
+      .footer {
+        background-color: #34495e;
+        color: #ffffff;
+        padding: 30px;
+        text-align: center;
+        font-size: 14px;
+      }
+      .footer p {
+        margin: 5px 0;
+        color: #bdc3c7;
+      }
+      .footer a {
+        color: #3498db;
+        text-decoration: none;
+      }
+      .divider {
+        height: 1px;
+        background-color: #e0e0e0;
+        margin: 30px 0;
+      }
+      .highlight {
+        background-color: #fff9e6;
+        border-left: 4px solid #f39c12;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .status-pending {
+        background-color: #f39c12;
+        color: white;
+      }
+      .status-paid {
+        background-color: #27ae60;
+        color: white;
+      }
+      .status-shipped {
+        background-color: #3498db;
+        color: white;
+      }
+      .status-delivered {
+        background-color: #2ecc71;
+        color: white;
+      }
+      .status-cancelled {
+        background-color: #e74c3c;
+        color: white;
+      }
+      @media only screen and (max-width: 600px) {
+        .email-container {
+          width: 100% !important;
+        }
+        .content {
+          padding: 20px !important;
+        }
+        .header {
+          padding: 20px !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>🛍️ {{companyName}}</h1>
+      </div>
+      <div class="content">{{content}}</div>
+      <div class="footer">
+        <p><strong>{{companyName}}</strong></p>
+        <p>{{companyAddress}}</p>
+        <p>
+          Email:
+          <a href="mailto:{{supportEmail}}">{{supportEmail}}</a>
+        </p>
+        <p>&copy; 2025 {{companyName}}. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>

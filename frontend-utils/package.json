@@ -1,0 +1,22 @@
+{
+  "name": "shopping-site-frontend-utils",
+  "version": "1.0.0",
+  "description": "Frontend API client with automatic CSRF protection for Shopping Site",
+  "type": "module",
+  "main": "api.js",
+  "scripts": {
+    "test": "http-server -p 8080"
+  },
+  "keywords": [
+    "csrf",
+    "api",
+    "client",
+    "shopping",
+    "ecommerce"
+  ],
+  "author": "Shopping Site Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

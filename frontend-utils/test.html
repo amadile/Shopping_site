@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Site API Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .output {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+      }
+      input {
+        padding: 8px;
+        margin: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 200px;
+      }
+      .success {
+        color: green;
+        font-weight: bold;
+      }
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🛍️ Shopping Site API Test</h1>
+      <p>Test your backend API with automatic CSRF protection</p>
+
+      <!-- Health Check -->
+      <div class="section">
+        <h3>🏥 Health Check</h3>
+        <button onclick="testHealthCheck()">Test Server Status</button>
+        <div id="health-output" class="output"></div>
+      </div>
+
+      <!-- CSRF Token -->
+      <div class="section">
+        <h3>🔒 CSRF Token</h3>
+        <button onclick="testCSRFToken()">Get CSRF Token</button>
+        <div id="csrf-output" class="output"></div>
+      </div>
+
+      <!-- User Registration -->
+      <div class="section">
+        <h3>👤 User Registration</h3>
+        <input type="text" id="reg-name" placeholder="Name" value="Test User" />
+        <input
+          type="email"
+          id="reg-email"
+          placeholder="Email"
+          value="test@example.com"
+        />
+        <input
+          type="password"
+          id="reg-password"
+          placeholder="Password"
+          value="password123"
+        />
+        <br />
+        <button onclick="testRegister()">Register User</button>
+        <div id="register-output" class="output"></div>
+      </div>
+
+      <!-- User Login -->
+      <div class="section">
+        <h3>🔑 User Login</h3>
+        <input
+          type="email"
+          id="login-email"
+          placeholder="Email"
+          value="test@example.com"
+        />
+        <input
+          type="password"
+          id="login-password"
+          placeholder="Password"
+          value="password123"
+        />
+        <br />
+        <button onclick="testLogin()">Login</button>
+        <button onclick="testLogout()">Logout</button>
+        <div id="login-output" class="output"></div>
+      </div>
+
+      <!-- Products -->
+      <div class="section">
+        <h3>📦 Products</h3>
+        <button onclick="testGetProducts()">Get All Products</button>
+        <div id="products-output" class="output"></div>
+      </div>
+
+      <!-- Cart -->
+      <div class="section">
+        <h3>🛒 Shopping Cart</h3>
+        <button onclick="testGetCart()">View Cart</button>
+        <button onclick="testAddToCart()">Add Item to Cart</button>
+        <button onclick="testClearCart()">Clear Cart</button>
+        <div id="cart-output" class="output"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      // Import the API client
+      import api from "./api.js";
+
+      // Make api available globally for onclick handlers
+      window.api = api;
+
+      // Helper function to display output
+      window.displayOutput = (elementId, data, isError = false) => {
+        const element = document.getElementById(elementId);
+        const className = isError ? "error" : "success";
+        element.innerHTML = `<span class="${className}">${
+          isError ? "❌ Error" : "✅ Success"
+        }</span>\n${JSON.stringify(data, null, 2)}`;
+      };
+
+      // Test functions
+      window.testHealthCheck = async () => {
+        const output = document.getElementById("health-output");
+        output.textContent = "Loading...";
+        try {
+          const response = await fetch("http://localhost:5000/");
+          const data = await response.json();
+          displayOutput("health-output", data);
+        } catch (error) {
+          displayOutput("health-output", { error: error.message }, true);
+        }
+      };
+
+      window.testCSRFToken = async () => {
+        const output = document.getElementById("csrf-output");
+        output.textContent = "Loading...";
+        try {
+          const response = await fetch("http://localhost:5000/api/csrf-token");
+          const data = await response.json();
+          displayOutput("csrf-output", data);
+        } catch (error) {
+          displayOutput("csrf-output", { error: error.message }, true);
+        }
+      };
+
+      window.testRegister = async () => {
+        const output = document.getElementById("register-output");
+        output.textContent = "Loading...";
+        try {
+          const name = document.getElementById("reg-name").value;
+          const email = document.getElementById("reg-email").value;
+          const password = document.getElementById("reg-password").value;
+
+          const result = await api.register({ name, email, password });
+          displayOutput("register-output", result);
+        } catch (error) {
+          displayOutput("register-output", { error: error.message }, true);
+        }
+      };
+
+      window.testLogin = async () => {
+        const output = document.getElementById("login-output");
+        output.textContent = "Loading...";
+        try {
+          const email = document.getElementById("login-email").value;
+          const password = document.getElementById("login-password").value;
+
+          const result = await api.login({ email, password });
+          displayOutput("login-output", {
+            message: "Login successful!",
+            token: result.token ? "Token saved to localStorage" : "No token",
+            ...result,
+          });
+        } catch (error) {
+          displayOutput("login-output", { error: error.message }, true);
+        }
+      };
+
+      window.testLogout = async () => {
+        const output = document.getElementById("login-output");
+        output.textContent = "Loading...";
+        try {
+          await api.logout();
+          displayOutput("login-output", { message: "Logged out successfully" });
+        } catch (error) {
+          displayOutput("login-output", { error: error.message }, true);
+        }
+      };
+
+      window.testGetProducts = async () => {
+        const output = document.getElementById("products-output");
+        output.textContent = "Loading...";
+        try {
+          const result = await api.getProducts({ limit: 5 });
+          displayOutput("products-output", result);
+        } catch (error) {
+          displayOutput("products-output", { error: error.message }, true);
+        }
+      };
+
+      window.testGetCart = async () => {
+        const output = document.getElementById("cart-output");
+        output.textContent = "Loading...";
+        try {
+          const result = await api.getCart();
+          displayOutput("cart-output", result);
+        } catch (error) {
+          displayOutput("cart-output", { error: error.message }, true);
+        }
+      };
+
+      window.testAddToCart = async () => {
+        const output = document.getElementById("cart-output");
+        output.textContent = "Loading...";
+        try {
+          // You'll need a real product ID here
+          const productId = prompt("Enter a product ID:");
+          if (!productId) {
+            displayOutput(
+              "cart-output",
+              { error: "Product ID required" },
+              true
+            );
+            return;
+          }
+          const result = await api.addToCart(productId, 1);
+          displayOutput("cart-output", result);
+        } catch (error) {
+          displayOutput("cart-output", { error: error.message }, true);
+        }
+      };
+
+      window.testClearCart = async () => {
+        const output = document.getElementById("cart-output");
+        output.textContent = "Loading...";
+        try {
+          const result = await api.clearCart();
+          displayOutput("cart-output", result);
+        } catch (error) {
+          displayOutput("cart-output", { error: error.message }, true);
+        }
+      };
+
+      console.log("✅ API Test Page Loaded");
+      console.log("🔗 API Base URL:", api.baseURL);
+    </script>
+  </body>
+</html>

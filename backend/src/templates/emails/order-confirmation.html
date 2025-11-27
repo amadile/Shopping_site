@@ -1,0 +1,74 @@
+<h2>Thank You for Your Order! 🎉</h2>
+<p>Hi <strong>{{userName}}</strong>,</p>
+<p>
+  We've received your order and we're getting it ready. We'll notify you when it
+  ships.
+</p>
+
+<div class="order-details">
+  <h3 style="margin-top: 0; color: #2c3e50">Order Details</h3>
+  <table>
+    <tr>
+      <td>Order Number:</td>
+      <td><strong>#{{orderId}}</strong></td>
+    </tr>
+    <tr>
+      <td>Order Date:</td>
+      <td>{{orderDate}}</td>
+    </tr>
+    <tr>
+      <td>Status:</td>
+      <td>
+        <span class="status-badge status-{{orderStatus}}">{{orderStatus}}</span>
+      </td>
+    </tr>
+    <tr>
+      <td>Subtotal:</td>
+      <td>${{subtotal}}</td>
+    </tr>
+    {{#if discount}}
+    <tr>
+      <td>Discount ({{couponCode}}):</td>
+      <td style="color: #27ae60">-${{discount}}</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td><strong>Total:</strong></td>
+      <td>
+        <strong style="font-size: 18px; color: #27ae60">${{total}}</strong>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">Order Items</h3>
+  {{#each items}}
+  <div style="border-bottom: 1px solid #e0e0e0; padding: 15px 0">
+    <strong>{{name}}</strong><br />
+    <span style="color: #777">Quantity: {{quantity}} × ${{price}}</span><br />
+    <span style="color: #555">Subtotal: ${{itemTotal}}</span>
+  </div>
+  {{/each}}
+</div>
+
+<div class="highlight">
+  <strong>What's Next?</strong><br />
+  We're processing your order and will send you a shipping confirmation email as
+  soon as it's on its way.
+</div>
+
+<div style="text-align: center; margin: 30px 0">
+  <a href="{{orderUrl}}" class="button">View Order Details</a>
+</div>
+
+<p>
+  If you have any questions, feel free to reply to this email or contact our
+  support team.
+</p>
+
+<p>Thank you for shopping with us!</p>
+<p style="margin-top: 30px">
+  Best regards,<br />
+  <strong>The Shopping Site Team</strong>
+</p>

@@ -1,0 +1,128 @@
+name: Deploy to Staging
+
+on:
+    push:
+        branches: [dev, staging]
+    workflow_dispatch:
+
+jobs:
+    deploy-staging:
+        name: Deploy to Staging Environment
+        runs-on: ubuntu-latest
+        environment:
+            name: staging
+            url: https://staging.shoppingsite.com
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "npm"
+                  cache-dependency-path: backend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./backend
+              run: npm ci --production
+
+            - name: Run tests
+              working-directory: ./backend
+              run: npm test
+              env:
+                  NODE_ENV: test
+                  MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+            - name: Build application
+              working-directory: ./backend
+              run: |
+                  echo "Building application..."
+                  # Add build steps if needed (e.g., TypeScript compilation)
+
+            - name: Create deployment package
+              run: |
+                  mkdir -p deploy
+                  cp -r backend/src deploy/
+                  cp backend/package*.json deploy/
+                  cp backend/.env.staging deploy/.env || true
+                  tar -czf deploy.tar.gz deploy/
+
+            - name: Configure AWS credentials
+              continue-on-error: true
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-east-1
+
+            - name: Deploy to AWS Elastic Beanstalk
+              continue-on-error: true
+              run: |
+                  aws elasticbeanstalk create-application-version \
+                    --application-name shopping-site \
+                    --version-label ${{ github.sha }} \
+                    --source-bundle S3Bucket="${{ secrets.S3_BUCKET }}",S3Key="deploy.tar.gz"
+
+                  aws elasticbeanstalk update-environment \
+                    --application-name shopping-site \
+                    --environment-name shopping-site-staging \
+                    --version-label ${{ github.sha }}
+
+            - name: Deploy to Azure App Service
+              continue-on-error: true
+              uses: azure/webapps-deploy@v2
+              with:
+                  app-name: "shopping-site-staging"
+                  publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+                  package: deploy.tar.gz
+
+            - name: Deploy to Heroku
+              continue-on-error: true
+              uses: akhileshns/heroku-deploy@v3.12.14
+              with:
+                  heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+                  heroku_app_name: "shopping-site-staging"
+                  heroku_email: ${{ secrets.HEROKU_EMAIL }}
+                  appdir: backend
+
+            - name: Deploy via SSH
+              continue-on-error: true
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  port: 22
+                  script: |
+                      cd /var/www/shopping-site-staging
+                      git pull origin staging
+                      npm ci --production
+                      pm2 restart shopping-site-staging
+
+            - name: Run smoke tests
+              run: |
+                  sleep 30
+                  curl -f https://staging.shoppingsite.com/health || exit 1
+                  curl -f https://staging.shoppingsite.com/api/products || exit 1
+
+            - name: Notify deployment status
+              if: always()
+              uses: 8398a7/action-slack@v3
+              env:
+                  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+              with:
+                  status: ${{ job.status }}
+                  text: "Staging deployment ${{ job.status }}"
+
+            - name: Create deployment record
+              if: success()
+              run: |
+                  echo "Deployment successful at $(date)" >> deployments.log
+                  git config user.name "GitHub Actions"
+                  git config user.email "actions@github.com"
+                  git add deployments.log || true
+                  git commit -m "Record staging deployment" || true
+                  git push || true

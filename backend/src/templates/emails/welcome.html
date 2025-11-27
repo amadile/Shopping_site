@@ -1,0 +1,76 @@
+<h2>Welcome to Shopping Site! 🎉</h2>
+<p>Hi <strong>{{userName}}</strong>,</p>
+<p>
+  Welcome aboard! We're thrilled to have you join our community of smart
+  shoppers.
+</p>
+
+<div
+  class="highlight"
+  style="border-left-color: #27ae60; background-color: #f0fff4"
+>
+  <strong>✅ Your Account is Ready!</strong><br />
+  You can now enjoy all the benefits of being a Shopping Site member.
+</div>
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">What You Can Do Now:</h3>
+  <ul style="color: #555; line-height: 1.8">
+    <li>
+      🛍️ <strong>Browse thousands of products</strong> across all categories
+    </li>
+    <li>
+      💳 <strong>Fast & secure checkout</strong> with multiple payment options
+    </li>
+    <li>📦 <strong>Track your orders</strong> in real-time</li>
+    <li>⭐ <strong>Write reviews</strong> and help other shoppers</li>
+    <li>🎁 <strong>Get exclusive offers</strong> and discounts</li>
+    <li>💰 <strong>Earn rewards</strong> on every purchase</li>
+  </ul>
+</div>
+
+{{#if welcomeOffer}}
+<div
+  class="highlight"
+  style="border-left-color: #f39c12; background-color: #fff9e6"
+>
+  <strong>🎁 Special Welcome Offer!</strong><br />
+  Use code
+  <strong style="font-size: 18px; color: #f39c12">{{welcomeCode}}</strong> to
+  get <strong>{{welcomeDiscount}}</strong> off your first order!<br />
+  <span style="font-size: 14px; color: #777">Valid until {{expiryDate}}</span>
+</div>
+{{/if}}
+
+<div style="text-align: center; margin: 30px 0">
+  <a href="{{shopUrl}}" class="button">Start Shopping</a>
+</div>
+
+<div style="margin: 25px 0">
+  <h3 style="color: #2c3e50">Getting Started Tips:</h3>
+  <ol style="color: #555; line-height: 1.8">
+    <li>
+      <strong>Complete your profile</strong> - Add shipping addresses for faster
+      checkout
+    </li>
+    <li>
+      <strong>Set preferences</strong> - Customize your shopping experience
+    </li>
+    <li>
+      <strong>Enable notifications</strong> - Stay updated on order status and
+      special offers
+    </li>
+  </ol>
+</div>
+
+<p>
+  Need help? Our support team is available 24/7 to assist you. Just reply to
+  this email or visit our help center.
+</p>
+
+<p>Happy shopping!</p>
+
+<p style="margin-top: 30px">
+  Best regards,<br />
+  <strong>The Shopping Site Team</strong>
+</p>
