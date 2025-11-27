@@ -1,0 +1,41 @@
+services:
+  # BACKEND SERVICE
+  - type: web
+    name: shopping-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: "*" # Update this to frontend URL later for security
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: MUNOPAY_API_KEY
+        sync: false
+      - key: MUNOPAY_WEBHOOK_SECRET
+        sync: false
+      - key: MUNOPAY_MERCHANT_ID
+        sync: false
+      - key: MUNOPAY_MODE
+        value: live
+
+  # FRONTEND STATIC SITE
+  - type: static
+    name: shopping-frontend
+    env: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: shopping-backend
+          property: url
