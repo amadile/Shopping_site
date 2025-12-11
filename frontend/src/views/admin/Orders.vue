@@ -3,10 +3,14 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-900">Manage Orders</h1>
-        
+
         <!-- Status Filter -->
         <div class="flex items-center">
-          <label for="status-filter" class="mr-2 text-sm font-medium text-gray-700">Filter by Status:</label>
+          <label
+            for="status-filter"
+            class="mr-2 text-sm font-medium text-gray-700"
+            >Filter by Status:</label
+          >
           <select
             id="status-filter"
             v-model="filterStatus"
@@ -25,13 +29,29 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"
+        ></div>
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="orders.length === 0" class="bg-white rounded-lg shadow-md p-12 text-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      <div
+        v-else-if="orders.length === 0"
+        class="bg-white rounded-lg shadow-md p-12 text-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-16 w-16 mx-auto text-gray-400 mb-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+          />
         </svg>
         <h3 class="text-xl font-medium text-gray-900 mb-2">No orders found</h3>
         <p class="text-gray-500">There are no orders matching your criteria.</p>
@@ -42,60 +62,127 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Order ID
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Customer
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Date
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Total
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Payment
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Status
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="order in orders" :key="order._id" class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                #{{ order.orderNumber || order._id.substring(0, 8).toUpperCase() }}
+            <tr
+              v-for="order in orders"
+              :key="order._id"
+              class="hover:bg-gray-50"
+            >
+              <td
+                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+              >
+                #{{
+                  order.orderNumber || order._id.substring(0, 8).toUpperCase()
+                }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ order.user?.name || 'Guest' }}
+                {{ order.user?.name || "Guest" }}
                 <div class="text-xs text-gray-400">{{ order.user?.email }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ formatDate(order.createdAt) }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+              <td
+                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium"
+              >
                 {{ formatCurrency(order.total) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ formatPaymentMethod(order.paymentMethod) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="getStatusClass(order.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                <span
+                  :class="getStatusClass(order.status)"
+                  class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                >
                   {{ capitalize(order.status) }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button @click="viewOrderDetails(order)" class="text-indigo-600 hover:text-indigo-900">Manage</button>
+              <td
+                class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+              >
+                <button
+                  @click="viewOrderDetails(order)"
+                  class="text-blue-600 hover:text-blue-900"
+                >
+                  Manage
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
-        
+
         <!-- Pagination -->
-        <div v-if="totalPages > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-          <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div
+          v-if="totalPages > 1"
+          class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+        >
+          <div
+            class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+          >
             <div>
               <p class="text-sm text-gray-700">
-                Showing page <span class="font-medium">{{ currentPage }}</span> of <span class="font-medium">{{ totalPages }}</span>
+                Showing page
+                <span class="font-medium">{{ currentPage }}</span> of
+                <span class="font-medium">{{ totalPages }}</span>
               </p>
             </div>
             <div>
-              <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+              <nav
+                class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                aria-label="Pagination"
+              >
                 <button
                   @click="changePage(currentPage - 1)"
                   :disabled="currentPage === 1"
                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
+                  :class="{
+                    'opacity-50 cursor-not-allowed': currentPage === 1,
+                  }"
                 >
                   Previous
                 </button>
@@ -103,7 +190,9 @@
                   @click="changePage(currentPage + 1)"
                   :disabled="currentPage === totalPages"
                   class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+                  :class="{
+                    'opacity-50 cursor-not-allowed': currentPage === totalPages,
+                  }"
                 >
                   Next
                 </button>
@@ -114,22 +203,59 @@
       </div>
 
       <!-- Order Details Modal -->
-      <div v-if="showOrderDetails && selectedOrder" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" @click="showOrderDetails = false"></div>
+      <div
+        v-if="showOrderDetails && selectedOrder"
+        class="fixed inset-0 z-50 overflow-y-auto"
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        >
+          <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            aria-hidden="true"
+            @click="showOrderDetails = false"
+          ></div>
 
-          <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+          <span
+            class="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+            >&#8203;</span
+          >
 
-          <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+          <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
+          >
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div class="flex justify-between items-start">
-                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                  Order Details #{{ selectedOrder.orderNumber || selectedOrder._id.substring(0, 8).toUpperCase() }}
+                <h3
+                  class="text-lg leading-6 font-medium text-gray-900"
+                  id="modal-title"
+                >
+                  Order Details #{{
+                    selectedOrder.orderNumber ||
+                    selectedOrder._id.substring(0, 8).toUpperCase()
+                  }}
                 </h3>
-                <button @click="showOrderDetails = false" class="text-gray-400 hover:text-gray-500">
+                <button
+                  @click="showOrderDetails = false"
+                  class="text-gray-400 hover:text-gray-500"
+                >
                   <span class="sr-only">Close</span>
-                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -137,27 +263,52 @@
               <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Customer Info -->
                 <div>
-                  <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Customer Information</h4>
-                  <p class="text-sm font-medium text-gray-900">{{ selectedOrder.shippingAddress?.fullName }}</p>
-                  <p class="text-sm text-gray-500">{{ selectedOrder.shippingAddress?.phone }}</p>
-                  <p class="text-sm text-gray-500">{{ selectedOrder.user?.email }}</p>
+                  <h4
+                    class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2"
+                  >
+                    Customer Information
+                  </h4>
+                  <p class="text-sm font-medium text-gray-900">
+                    {{ selectedOrder.shippingAddress?.fullName }}
+                  </p>
+                  <p class="text-sm text-gray-500">
+                    {{ selectedOrder.shippingAddress?.phone }}
+                  </p>
+                  <p class="text-sm text-gray-500">
+                    {{ selectedOrder.user?.email }}
+                  </p>
                 </div>
 
                 <!-- Shipping Address -->
                 <div>
-                  <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Shipping Address</h4>
+                  <h4
+                    class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2"
+                  >
+                    Shipping Address
+                  </h4>
                   <p class="text-sm text-gray-500">
-                    {{ selectedOrder.shippingAddress?.addressLine1 }}<br>
-                    <span v-if="selectedOrder.shippingAddress?.addressLine2">{{ selectedOrder.shippingAddress?.addressLine2 }}<br></span>
-                    {{ selectedOrder.shippingAddress?.district }}, {{ selectedOrder.shippingAddress?.zone }}<br>
-                    {{ selectedOrder.shippingAddress?.landmark ? 'Near ' + selectedOrder.shippingAddress?.landmark : '' }}
+                    {{ selectedOrder.shippingAddress?.addressLine1 }}<br />
+                    <span v-if="selectedOrder.shippingAddress?.addressLine2"
+                      >{{ selectedOrder.shippingAddress?.addressLine2 }}<br
+                    /></span>
+                    {{ selectedOrder.shippingAddress?.district }},
+                    {{ selectedOrder.shippingAddress?.zone }}<br />
+                    {{
+                      selectedOrder.shippingAddress?.landmark
+                        ? "Near " + selectedOrder.shippingAddress?.landmark
+                        : ""
+                    }}
                   </p>
                 </div>
               </div>
 
               <!-- Order Items -->
               <div class="mt-6">
-                <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Order Items</h4>
+                <h4
+                  class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2"
+                >
+                  Order Items
+                </h4>
                 <div class="border rounded-md overflow-hidden">
                   <table class="min-w-full divide-y divide-gray-200">
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -165,23 +316,44 @@
                         <td class="px-4 py-3 whitespace-nowrap">
                           <div class="flex items-center">
                             <div class="h-10 w-10 flex-shrink-0">
-                              <img class="h-10 w-10 rounded object-cover" :src="item.product?.images?.[0] || 'https://via.placeholder.com/40'" alt="" />
+                              <img
+                                class="h-10 w-10 rounded object-cover"
+                                :src="
+                                  item.product?.images?.[0] ||
+                                  'https://via.placeholder.com/40'
+                                "
+                                alt=""
+                              />
                             </div>
                             <div class="ml-4">
-                              <div class="text-sm font-medium text-gray-900">{{ item.product?.name || 'Unknown Product' }}</div>
-                              <div class="text-sm text-gray-500">Qty: {{ item.quantity }}</div>
+                              <div class="text-sm font-medium text-gray-900">
+                                {{ item.product?.name || "Unknown Product" }}
+                              </div>
+                              <div class="text-sm text-gray-500">
+                                Qty: {{ item.quantity }}
+                              </div>
                             </div>
                           </div>
                         </td>
-                        <td class="px-4 py-3 whitespace-nowrap text-right text-sm text-gray-900">
+                        <td
+                          class="px-4 py-3 whitespace-nowrap text-right text-sm text-gray-900"
+                        >
                           {{ formatCurrency(item.price * item.quantity) }}
                         </td>
                       </tr>
                     </tbody>
                     <tfoot class="bg-gray-50">
                       <tr>
-                        <td class="px-4 py-3 text-right text-sm font-medium text-gray-900">Total</td>
-                        <td class="px-4 py-3 text-right text-sm font-bold text-gray-900">{{ formatCurrency(selectedOrder.total) }}</td>
+                        <td
+                          class="px-4 py-3 text-right text-sm font-medium text-gray-900"
+                        >
+                          Total
+                        </td>
+                        <td
+                          class="px-4 py-3 text-right text-sm font-bold text-gray-900"
+                        >
+                          {{ formatCurrency(selectedOrder.total) }}
+                        </td>
                       </tr>
                     </tfoot>
                   </table>
@@ -190,25 +362,41 @@
 
               <!-- Update Status -->
               <div class="mt-6 border-t pt-4">
-                <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Update Status</h4>
+                <h4
+                  class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3"
+                >
+                  Update Status
+                </h4>
                 <div class="flex flex-wrap gap-2">
-                  <button 
-                    v-for="status in ['pending', 'processing', 'shipped', 'delivered', 'cancelled']"
+                  <button
+                    v-for="status in [
+                      'pending',
+                      'processing',
+                      'shipped',
+                      'delivered',
+                      'cancelled',
+                    ]"
                     :key="status"
                     @click="updateOrderStatus(selectedOrder, status)"
                     :disabled="selectedOrder.status === status"
                     class="px-4 py-2 rounded text-sm font-medium border"
-                    :class="selectedOrder.status === status ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'"
+                    :class="
+                      selectedOrder.status === status
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                    "
                   >
                     {{ capitalize(status) }}
                   </button>
                 </div>
               </div>
             </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button 
-                type="button" 
-                @click="showOrderDetails = false" 
+            <div
+              class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+            >
+              <button
+                type="button"
+                @click="showOrderDetails = false"
                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               >
                 Close
@@ -222,135 +410,138 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import api from '@/utils/api'
-import AdminLayout from '@/components/layouts/AdminLayout.vue'
-import { useToast } from 'vue-toastification'
+import AdminLayout from "@/components/layouts/AdminLayout.vue";
+import api from "@/utils/api";
+import { onMounted, ref } from "vue";
+import { useToast } from "vue-toastification";
 
-const toast = useToast()
+const toast = useToast();
 
 // Orders data
-const orders = ref([])
-const loading = ref(false)
-const selectedOrder = ref(null)
-const showOrderDetails = ref(false)
-const filterStatus = ref('')
-const currentPage = ref(1)
-const totalPages = ref(1)
+const orders = ref([]);
+const loading = ref(false);
+const selectedOrder = ref(null);
+const showOrderDetails = ref(false);
+const filterStatus = ref("");
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 // Format currency
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('en-UG', {
-    style: 'currency',
-    currency: 'UGX'
-  }).format(amount)
-}
+  return new Intl.NumberFormat("en-UG", {
+    style: "currency",
+    currency: "UGX",
+  }).format(amount);
+};
 
 // Format date
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('en-UG', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
-}
+  return new Date(dateString).toLocaleDateString("en-UG", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
 
 // Capitalize string
 const capitalize = (str) => {
-  if (!str) return ''
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
 // Get status class
 const getStatusClass = (status) => {
   const classes = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    processing: 'bg-blue-100 text-blue-800',
-    shipped: 'bg-purple-100 text-purple-800',
-    delivered: 'bg-green-100 text-green-800',
-    cancelled: 'bg-red-100 text-red-800',
-    paid: 'bg-green-100 text-green-800'
-  }
-  return classes[status] || 'bg-gray-100 text-gray-800'
-}
+    pending: "bg-yellow-100 text-yellow-800",
+    processing: "bg-blue-100 text-blue-800",
+    shipped: "bg-purple-100 text-purple-800",
+    delivered: "bg-green-100 text-green-800",
+    cancelled: "bg-red-100 text-red-800",
+    paid: "bg-green-100 text-green-800",
+  };
+  return classes[status] || "bg-gray-100 text-gray-800";
+};
 
 // Format payment method
 const formatPaymentMethod = (method) => {
   const methods = {
-    'card': 'Credit Card',
-    'paypal': 'PayPal',
-    'cod': 'Cash on Delivery',
-    'mtn_momo': 'MTN Mobile Money',
-    'airtel_money': 'Airtel Money',
-    'bank_transfer': 'Bank Transfer'
-  }
-  return methods[method] || method
-}
+    card: "Credit Card",
+    paypal: "PayPal",
+    cod: "Cash on Delivery",
+    mtn_momo: "MTN Mobile Money",
+    airtel_money: "Airtel Money",
+    bank_transfer: "Bank Transfer",
+  };
+  return methods[method] || method;
+};
 
 // Load orders
 const loadOrders = async () => {
-  loading.value = true
+  loading.value = true;
+  error.value = false;
   try {
     const params = {
       page: currentPage.value,
-      limit: 10
-    }
+      limit: 10,
+    };
     if (filterStatus.value) {
-      params.status = filterStatus.value
+      params.status = filterStatus.value;
     }
-    
-    const response = await api.get('/admin/orders', { params })
-    orders.value = response.data.orders
-    totalPages.value = response.data.totalPages
-    currentPage.value = response.data.currentPage
-  } catch (error) {
-    console.error('Error loading orders:', error)
-    toast.error('Failed to load orders')
+
+    const response = await api.get("/admin/orders", { params });
+    orders.value = response.data.orders || [];
+    totalPages.value = response.data.totalPages || 1;
+    currentPage.value = response.data.currentPage || 1;
+  } catch (err) {
+    console.error("Error loading orders:", err);
+    error.value = true;
+    toast.error("Failed to load orders. Please try again.");
+    orders.value = [];
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-    loadOrders()
+    currentPage.value = page;
+    loadOrders();
   }
-}
+};
 
 // View order details
 const viewOrderDetails = (order) => {
-  selectedOrder.value = order
-  showOrderDetails.value = true
-}
+  selectedOrder.value = order;
+  showOrderDetails.value = true;
+};
 
 // Update order status
 const updateOrderStatus = async (order, status) => {
   try {
     const response = await api.put(`/orders/${order._id}/status`, {
-      status
-    })
-    
+      status,
+    });
+
     // Update order in the list
-    const index = orders.value.findIndex(o => o._id === order._id)
+    const index = orders.value.findIndex((o) => o._id === order._id);
     if (index !== -1) {
-      orders.value[index] = response.data
+      orders.value[index] = response.data;
     }
-    
+
     // Update selected order if it's the same
     if (selectedOrder.value && selectedOrder.value._id === order._id) {
-      selectedOrder.value = response.data
+      selectedOrder.value = response.data;
     }
-    
-    toast.success(`Order status updated to ${status}`)
+
+    toast.success(`Order status updated to ${status}`);
   } catch (error) {
-    console.error('Error updating order status:', error)
-    toast.error('Failed to update order status')
+    console.error("Error updating order status:", error);
+    toast.error("Failed to update order status");
   }
-}
+};
 
 // Load orders on mount
 onMounted(() => {
-  loadOrders()
-})
+  loadOrders();
+});
 </script>

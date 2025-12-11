@@ -5,7 +5,7 @@ let redisClient = null;
 
 if (process.env.REDIS_URL && process.env.NODE_ENV !== "test") {
   redisClient = new Redis(process.env.REDIS_URL, {
-    maxRetriesPerRequest: 3,
+    maxRetriesPerRequest: null, // Required for BullMQ
     retryStrategy(times) {
       const delay = Math.min(times * 50, 2000);
       return delay;

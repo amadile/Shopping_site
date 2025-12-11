@@ -34,7 +34,9 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"
+        ></div>
       </div>
 
       <!-- Vendors Table -->
@@ -43,53 +45,87 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Business
                 </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Contact
                 </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Status
                 </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Commission
                 </th>
-                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="vendor in vendors" :key="vendor._id" class="hover:bg-gray-50">
+              <tr
+                v-for="vendor in vendors"
+                :key="vendor._id"
+                class="hover:bg-gray-50"
+              >
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900">{{ vendor.businessName }}</div>
-                  <div class="text-sm text-gray-500">{{ vendor.businessEmail }}</div>
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ vendor.businessName }}
+                  </div>
+                  <div class="text-sm text-gray-500">
+                    {{ vendor.businessEmail }}
+                  </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ vendor.ownerName }}</div>
+                  <div class="text-sm text-gray-900">
+                    {{ vendor.ownerName }}
+                  </div>
                   <div class="text-sm text-gray-500">{{ vendor.phone }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span
                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
                     :class="{
-                      'bg-yellow-100 text-yellow-800': vendor.status === 'pending',
-                      'bg-green-100 text-green-800': vendor.status === 'approved',
+                      'bg-yellow-100 text-yellow-800':
+                        vendor.status === 'pending',
+                      'bg-green-100 text-green-800':
+                        vendor.status === 'approved',
                       'bg-red-100 text-red-800': vendor.status === 'rejected',
-                      'bg-gray-100 text-gray-800': !vendor.status
+                      'bg-gray-100 text-gray-800': !vendor.status,
                     }"
                   >
-                    {{ vendor.status ? (vendor.status.charAt(0).toUpperCase() + vendor.status.slice(1)) : 'Unknown' }}
+                    {{
+                      vendor.status
+                        ? vendor.status.charAt(0).toUpperCase() +
+                          vendor.status.slice(1)
+                        : "Unknown"
+                    }}
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {{ vendor.commissionRate || 0 }}%
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                >
                   <button
                     @click="openDetailsModal(vendor)"
-                    class="text-indigo-600 hover:text-indigo-900 mr-4"
+                    class="text-blue-600 hover:text-blue-900 mr-4"
                   >
                     Details
                   </button>
@@ -119,20 +155,32 @@
         </div>
 
         <!-- Pagination -->
-        <div v-if="totalPages > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-          <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div
+          v-if="totalPages > 1"
+          class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+        >
+          <div
+            class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+          >
             <div>
               <p class="text-sm text-gray-700">
-                Showing page <span class="font-medium">{{ currentPage }}</span> of <span class="font-medium">{{ totalPages }}</span>
+                Showing page
+                <span class="font-medium">{{ currentPage }}</span> of
+                <span class="font-medium">{{ totalPages }}</span>
               </p>
             </div>
             <div>
-              <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+              <nav
+                class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                aria-label="Pagination"
+              >
                 <button
                   @click="changePage(currentPage - 1)"
                   :disabled="currentPage === 1"
                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
+                  :class="{
+                    'opacity-50 cursor-not-allowed': currentPage === 1,
+                  }"
                 >
                   Previous
                 </button>
@@ -140,7 +188,9 @@
                   @click="changePage(currentPage + 1)"
                   :disabled="currentPage === totalPages"
                   class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+                  :class="{
+                    'opacity-50 cursor-not-allowed': currentPage === totalPages,
+                  }"
                 >
                   Next
                 </button>
@@ -151,54 +201,109 @@
       </div>
 
       <!-- Vendor Details Modal -->
-      <div v-if="showDetailsModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" @click="closeDetailsModal"></div>
-          <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-          <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <div
+        v-if="showDetailsModal"
+        class="fixed inset-0 z-50 overflow-y-auto"
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        >
+          <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            aria-hidden="true"
+            @click="closeDetailsModal"
+          ></div>
+          <span
+            class="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+            >&#8203;</span
+          >
+          <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          >
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+              <h3
+                class="text-lg leading-6 font-medium text-gray-900"
+                id="modal-title"
+              >
                 Vendor Details: {{ selectedVendor?.businessName }}
               </h3>
               <div class="mt-4 space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-gray-500">Owner Name</label>
-                    <p class="mt-1 text-sm text-gray-900">{{ selectedVendor?.ownerName }}</p>
+                    <label class="block text-sm font-medium text-gray-500"
+                      >Owner Name</label
+                    >
+                    <p class="mt-1 text-sm text-gray-900">
+                      {{ selectedVendor?.ownerName }}
+                    </p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-500">Phone</label>
-                    <p class="mt-1 text-sm text-gray-900">{{ selectedVendor?.phone }}</p>
+                    <label class="block text-sm font-medium text-gray-500"
+                      >Phone</label
+                    >
+                    <p class="mt-1 text-sm text-gray-900">
+                      {{ selectedVendor?.phone }}
+                    </p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-500">Email</label>
-                    <p class="mt-1 text-sm text-gray-900">{{ selectedVendor?.businessEmail }}</p>
+                    <label class="block text-sm font-medium text-gray-500"
+                      >Email</label
+                    >
+                    <p class="mt-1 text-sm text-gray-900">
+                      {{ selectedVendor?.businessEmail }}
+                    </p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-500">Status</label>
-                    <p class="mt-1 text-sm font-semibold" :class="{
-                      'text-yellow-600': selectedVendor?.status === 'pending',
-                      'text-green-600': selectedVendor?.status === 'approved',
-                      'text-red-600': selectedVendor?.status === 'rejected'
-                    }">{{ selectedVendor?.status ? selectedVendor.status.toUpperCase() : 'UNKNOWN' }}</p>
+                    <label class="block text-sm font-medium text-gray-500"
+                      >Status</label
+                    >
+                    <p
+                      class="mt-1 text-sm font-semibold"
+                      :class="{
+                        'text-yellow-600': selectedVendor?.status === 'pending',
+                        'text-green-600': selectedVendor?.status === 'approved',
+                        'text-red-600': selectedVendor?.status === 'rejected',
+                      }"
+                    >
+                      {{
+                        selectedVendor?.status
+                          ? selectedVendor.status.toUpperCase()
+                          : "UNKNOWN"
+                      }}
+                    </p>
                   </div>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-500">Address</label>
+                  <label class="block text-sm font-medium text-gray-500"
+                    >Address</label
+                  >
                   <p class="mt-1 text-sm text-gray-900">
-                    {{ selectedVendor?.address?.street }}<br>
-                    {{ selectedVendor?.address?.city }}, {{ selectedVendor?.address?.district }}
+                    {{ selectedVendor?.address?.street }}<br />
+                    {{ selectedVendor?.address?.city }},
+                    {{ selectedVendor?.address?.district }}
                   </p>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-500">Description</label>
-                  <p class="mt-1 text-sm text-gray-900">{{ selectedVendor?.description || 'No description provided.' }}</p>
+                  <label class="block text-sm font-medium text-gray-500"
+                    >Description</label
+                  >
+                  <p class="mt-1 text-sm text-gray-900">
+                    {{
+                      selectedVendor?.description || "No description provided."
+                    }}
+                  </p>
                 </div>
 
                 <div class="border-t pt-4">
-                  <label class="block text-sm font-medium text-gray-700">Commission Rate (%)</label>
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Commission Rate (%)</label
+                  >
                   <div class="mt-1 flex rounded-md shadow-sm">
                     <input
                       type="number"
@@ -215,7 +320,9 @@
                 </div>
               </div>
             </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <div
+              class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+            >
               <button
                 @click="closeDetailsModal"
                 type="button"
@@ -232,126 +339,128 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import api from '@/utils/api'
-import AdminLayout from '@/components/layouts/AdminLayout.vue'
-import { useToast } from 'vue-toastification'
+import AdminLayout from "@/components/layouts/AdminLayout.vue";
+import api from "@/utils/api";
+import { onMounted, ref } from "vue";
+import { useToast } from "vue-toastification";
 
-const toast = useToast()
+const toast = useToast();
 
 // State
-const vendors = ref([])
-const loading = ref(false)
-const searchQuery = ref('')
-const filterStatus = ref('')
-const currentPage = ref(1)
-const totalPages = ref(1)
+const vendors = ref([]);
+const loading = ref(false);
+const searchQuery = ref("");
+const filterStatus = ref("");
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 // Details Modal
-const showDetailsModal = ref(false)
-const selectedVendor = ref(null)
-const newCommissionRate = ref(0)
+const showDetailsModal = ref(false);
+const selectedVendor = ref(null);
+const newCommissionRate = ref(0);
 
 // Debounce search
-let searchTimeout = null
+let searchTimeout = null;
 const debounceSearch = () => {
-  clearTimeout(searchTimeout)
+  clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
-    currentPage.value = 1
-    loadVendors()
-  }, 500)
-}
+    currentPage.value = 1;
+    loadVendors();
+  }, 500);
+};
 
 // Load vendors
 const loadVendors = async () => {
-  loading.value = true
+  loading.value = true;
   try {
     const params = {
       page: currentPage.value,
-      limit: 10
-    }
-    if (filterStatus.value) params.status = filterStatus.value
-    if (searchQuery.value) params.search = searchQuery.value
-    
-    const response = await api.get('/admin/vendors', { params })
-    vendors.value = response.data.vendors
-    totalPages.value = response.data.totalPages
-    currentPage.value = response.data.currentPage
+      limit: 10,
+    };
+    if (filterStatus.value) params.status = filterStatus.value;
+    if (searchQuery.value) params.search = searchQuery.value;
+
+    const response = await api.get("/admin/vendors", { params });
+    vendors.value = response.data.vendors;
+    totalPages.value = response.data.totalPages;
+    currentPage.value = response.data.currentPage;
   } catch (error) {
-    console.error('Error loading vendors:', error)
-    toast.error('Failed to load vendors')
+    console.error("Error loading vendors:", error);
+    toast.error("Failed to load vendors");
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-    loadVendors()
+    currentPage.value = page;
+    loadVendors();
   }
-}
+};
 
 // Vendor Actions
 const approveVendor = async (id) => {
   try {
-    await api.put(`/admin/vendors/${id}/approve`)
-    toast.success('Vendor approved successfully')
-    loadVendors()
+    await api.put(`/admin/vendors/${id}/approve`);
+    toast.success("Vendor approved successfully");
+    loadVendors();
   } catch (error) {
-    console.error('Error approving vendor:', error)
-    toast.error('Failed to approve vendor')
+    console.error("Error approving vendor:", error);
+    toast.error("Failed to approve vendor");
   }
-}
+};
 
 const rejectVendor = async (id) => {
-  if (!confirm('Are you sure you want to reject this vendor?')) return
-  
+  if (!confirm("Are you sure you want to reject this vendor?")) return;
+
   try {
-    await api.put(`/admin/vendors/${id}/reject`, { reason: 'Admin rejected' })
-    toast.success('Vendor rejected successfully')
-    loadVendors()
+    await api.put(`/admin/vendors/${id}/reject`, { reason: "Admin rejected" });
+    toast.success("Vendor rejected successfully");
+    loadVendors();
   } catch (error) {
-    console.error('Error rejecting vendor:', error)
-    toast.error('Failed to reject vendor')
+    console.error("Error rejecting vendor:", error);
+    toast.error("Failed to reject vendor");
   }
-}
+};
 
 // Details Modal
 const openDetailsModal = (vendor) => {
-  selectedVendor.value = vendor
-  newCommissionRate.value = vendor.commissionRate
-  showDetailsModal.value = true
-}
+  selectedVendor.value = vendor;
+  newCommissionRate.value = vendor.commissionRate;
+  showDetailsModal.value = true;
+};
 
 const closeDetailsModal = () => {
-  showDetailsModal.value = false
-  selectedVendor.value = null
-}
+  showDetailsModal.value = false;
+  selectedVendor.value = null;
+};
 
 const updateCommission = async () => {
-  if (!selectedVendor.value) return
-  
+  if (!selectedVendor.value) return;
+
   try {
     await api.put(`/admin/commissions/vendor/${selectedVendor.value._id}`, {
-      commissionRate: newCommissionRate.value
-    })
-    
+      commissionRate: newCommissionRate.value,
+    });
+
     // Update local state
-    selectedVendor.value.commissionRate = newCommissionRate.value
-    const index = vendors.value.findIndex(v => v._id === selectedVendor.value._id)
+    selectedVendor.value.commissionRate = newCommissionRate.value;
+    const index = vendors.value.findIndex(
+      (v) => v._id === selectedVendor.value._id
+    );
     if (index !== -1) {
-      vendors.value[index].commissionRate = newCommissionRate.value
+      vendors.value[index].commissionRate = newCommissionRate.value;
     }
-    
-    toast.success('Commission rate updated')
+
+    toast.success("Commission rate updated");
   } catch (error) {
-    console.error('Error updating commission:', error)
-    toast.error('Failed to update commission rate')
+    console.error("Error updating commission:", error);
+    toast.error("Failed to update commission rate");
   }
-}
+};
 
 onMounted(() => {
-  loadVendors()
-})
+  loadVendors();
+});
 </script>

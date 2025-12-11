@@ -1,10 +1,11 @@
 import { logger } from "../config/logger.js";
 import Order from "../models/Order.js";
 import StockReservation from "../models/StockReservation.js";
-import {
-  sendOrderCancellation,
-  sendRefundConfirmation,
-} from "./emailService.js";
+// TODO: Add these methods to emailService
+// import {
+//   sendOrderCancellation,
+//   sendRefundConfirmation,
+// } from "./emailService.js";
 import inventoryService from "./inventoryService.js";
 
 /**
@@ -71,11 +72,13 @@ class OrderCancellationService {
       const User = (await import("../models/User.js")).default;
       const user = await User.findById(userId);
       if (user) {
-        await sendOrderCancellation(user, order);
+        // TODO: Implement sendOrderCancellation in emailService
+        // await sendOrderCancellation(user, order);
 
         // Send refund confirmation if refund was processed
         if (refundResult) {
-          await sendRefundConfirmation(user, order, refundResult);
+          // TODO: Implement sendRefundConfirmation in emailService
+          // await sendRefundConfirmation(user, order, refundResult);
         }
       }
 

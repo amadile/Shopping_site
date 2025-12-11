@@ -128,43 +128,80 @@
         </div>
 
         <!-- Pending Manual Payments Alert -->
-        <div v-if="pendingManualPayments.length > 0" class="card bg-yellow-50 border-2 border-yellow-300 mb-8">
+        <div
+          v-if="pendingManualPayments.length > 0"
+          class="card bg-yellow-50 border-2 border-yellow-300 mb-8"
+        >
           <div class="flex items-start gap-4">
             <div class="flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-yellow-600">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-12 h-12 text-yellow-600"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                />
               </svg>
             </div>
             <div class="flex-1">
               <h3 class="text-lg font-bold text-yellow-900 mb-2">
-                ⚠️ {{ pendingManualPayments.length }} Pending Manual Payment{{ pendingManualPayments.length > 1 ? 's' : '' }}
+                ⚠️ {{ pendingManualPayments.length }} Pending Manual Payment{{
+                  pendingManualPayments.length > 1 ? "s" : ""
+                }}
               </h3>
               <p class="text-sm text-yellow-800 mb-4">
-                You have manual mobile money payments waiting for verification. Please verify these payments to complete the orders.
+                You have manual mobile money payments waiting for verification.
+                Please verify these payments to complete the orders.
               </p>
               <div class="space-y-2 mb-4">
-                <div v-for="payment in pendingManualPayments.slice(0, 3)" :key="payment._id" class="bg-white rounded-lg p-3 border border-yellow-200">
+                <div
+                  v-for="payment in pendingManualPayments.slice(0, 3)"
+                  :key="payment._id"
+                  class="bg-white rounded-lg p-3 border border-yellow-200"
+                >
                   <div class="flex justify-between items-start">
                     <div>
-                      <p class="font-semibold text-sm">Order #{{ payment._id.slice(-6).toUpperCase() }}</p>
-                      <p class="text-xs text-gray-600">{{ payment.user?.name }} - {{ payment.user?.email }}</p>
+                      <p class="font-semibold text-sm">
+                        Order #{{ payment._id.slice(-6).toUpperCase() }}
+                      </p>
+                      <p class="text-xs text-gray-600">
+                        {{ payment.user?.name }} - {{ payment.user?.email }}
+                      </p>
                       <p class="text-xs text-gray-600 mt-1">
-                        <span class="font-medium">Transaction ID:</span> 
-                        <span class="font-mono">{{ payment.manualTransactionId }}</span>
+                        <span class="font-medium">Transaction ID:</span>
+                        <span class="font-mono">{{
+                          payment.manualTransactionId
+                        }}</span>
                       </p>
                     </div>
                     <div class="text-right">
-                      <p class="font-bold text-primary">{{ formatCurrency(payment.total) }}</p>
-                      <p class="text-xs text-gray-500">{{ formatRelativeTime(payment.createdAt) }}</p>
+                      <p class="font-bold text-primary">
+                        {{ formatCurrency(payment.total) }}
+                      </p>
+                      <p class="text-xs text-gray-500">
+                        {{ formatRelativeTime(payment.createdAt) }}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="flex gap-2">
-                <button @click="$router.push('/admin/manual-payments')" class="btn btn-warning">
+                <button
+                  @click="$router.push('/admin/manual-payments')"
+                  class="btn btn-warning"
+                >
                   📱 Verify Payments ({{ pendingManualPayments.length }})
                 </button>
-                <button @click="refreshManualPayments" class="btn btn-secondary">
+                <button
+                  @click="refreshManualPayments"
+                  class="btn btn-secondary"
+                >
                   🔄 Refresh
                 </button>
               </div>
@@ -379,6 +416,7 @@ const toast = useToast();
 
 // State
 const loading = ref(false);
+const error = ref(false);
 const stats = ref({});
 const recentOrders = ref([]);
 const lowStockProducts = ref([]);
@@ -387,6 +425,7 @@ const pendingManualPayments = ref([]);
 // Fetch dashboard data
 const fetchDashboardData = async () => {
   loading.value = true;
+  error.value = false;
   try {
     // 1. Fetch basic stats (Total Revenue, Orders, Products, Users)
     const statsResponse = await api.get("/admin/stats");
@@ -394,7 +433,7 @@ const fetchDashboardData = async () => {
 
     // 2. Fetch growth metrics (for percentages)
     const growthResponse = await api.get("/admin/analytics/growth-metrics", {
-      params: { period: "month" }
+      params: { period: "month" },
     });
     const growthMetrics = growthResponse.data;
 
@@ -404,28 +443,28 @@ const fetchDashboardData = async () => {
       revenueGrowth: growthMetrics.revenue.growth,
       totalOrders: basicStats.totalOrders,
       pendingOrders: growthMetrics.orders.current, // Using current month orders as proxy for "recent activity" or just show total
-      // Actually, pendingOrders usually means status='pending'. 
-      // admin/stats doesn't give pending count. 
+      // Actually, pendingOrders usually means status='pending'.
+      // admin/stats doesn't give pending count.
       // growthMetrics doesn't give pending count.
       // marketplace-overview gives orders.byStatus.
       // Let's fetch marketplace-overview for pending count if needed, or just skip it for now.
       // basicStats has totalOrders.
-      
+
       totalCustomers: basicStats.totalUsers, // This includes all users, but close enough
       newCustomers: growthMetrics.customers.current,
-      
+
       totalProducts: basicStats.totalProducts,
-      lowStockProducts: 0 // Will be updated by products call
+      lowStockProducts: 0, // Will be updated by products call
     };
 
     // 3. Fetch recent orders
     const ordersResponse = await api.get("/admin/orders", {
-      params: { limit: 5, status: "pending" } // Get pending orders for "Recent Orders" or just all?
+      params: { limit: 5, status: "pending" }, // Get pending orders for "Recent Orders" or just all?
       // Usually recent orders are just sorted by date.
     });
     // If we want just recent orders regardless of status:
     const allOrdersResponse = await api.get("/admin/orders", {
-      params: { limit: 5 }
+      params: { limit: 5 },
     });
     recentOrders.value = allOrdersResponse.data.orders;
 
@@ -435,10 +474,10 @@ const fetchDashboardData = async () => {
     });
     lowStockProducts.value = productsResponse.data.products;
     stats.value.lowStockProducts = productsResponse.data.total;
-
   } catch (err) {
     console.error("Failed to load dashboard data:", err);
-    toast.error("Failed to load dashboard data");
+    error.value = true;
+    toast.error("Failed to load dashboard data. Please try again.");
   } finally {
     loading.value = false;
   }
@@ -460,14 +499,14 @@ const getStatusBadgeClass = (status) => {
 const getProductImage = (product) => {
   if (product.images && product.images.length > 0) {
     const img = product.images[0];
-    const url = typeof img === 'string' ? img : img.url;
-    
-    if (url && url.startsWith('/')) {
-      return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${url}`;
+    const url = typeof img === "string" ? img : img.url;
+
+    if (url && url.startsWith("/")) {
+      return `${import.meta.env.VITE_API_URL || "http://localhost:5000"}${url}`;
     }
     return url;
   }
-  return 'data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 40 40\'%3e%3crect width=\'40\' height=\'40\' fill=\'%23e5e7eb\'/%3e%3cpath d=\'M20 20l-4 4h8l-4-4z\' fill=\'%239ca3af\'/%3e%3c/svg%3e';
+  return "data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3e%3crect width='40' height='40' fill='%23e5e7eb'/%3e%3cpath d='M20 20l-4 4h8l-4-4z' fill='%239ca3af'/%3e%3c/svg%3e";
 };
 
 // Initialize

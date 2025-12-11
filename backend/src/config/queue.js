@@ -1,7 +1,7 @@
 import { Queue, Worker } from "bullmq";
 import { redisClient } from "./redis.js";
 import { logger } from "./logger.js";
-import { sendOrderConfirmation, sendOrderStatusUpdate } from "../services/emailService.js";
+import emailService from "../services/emailService.js";
 
 const connection = redisClient
   ? {
@@ -16,9 +16,9 @@ export const emailQueue = connection
       add: async (name, data) => {
         logger.info(`Mock queue: ${name}`, data);
         if (name === "orderConfirmation") {
-          await sendOrderConfirmation(data.user, data.order);
+          await emailService.sendOrderConfirmation(data.user, data.order);
         } else if (name === "orderStatusUpdate") {
-          await sendOrderStatusUpdate(data.user, data.order);
+          await emailService.sendOrderStatusUpdate(data.user, data.order);
         }
       },
     };
@@ -31,10 +31,10 @@ if (connection) {
 
       switch (job.name) {
         case "orderConfirmation":
-          await sendOrderConfirmation(job.data.user, job.data.order);
+          await emailService.sendOrderConfirmation(job.data.user, job.data.order);
           break;
         case "orderStatusUpdate":
-          await sendOrderStatusUpdate(job.data.user, job.data.order);
+          await emailService.sendOrderStatusUpdate(job.data.user, job.data.order);
           break;
         default:
           logger.warn(`Unknown email job: ${job.name}`);

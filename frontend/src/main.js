@@ -1,8 +1,6 @@
-import "./assets/main.css";
 import "./assets/animations.css";
+import "./assets/main.css";
 import "./assets/professional-animations.css";
-import "./assets/thunder-effect.css";
-import { initAutoAnimations } from "./utils/autoAnimate";
 
 import { createPinia } from "pinia";
 import { createApp } from "vue";
@@ -35,6 +33,3 @@ app.use(Toast, {
 });
 
 app.mount("#app");
-
-// Initialize auto-animations
-setTimeout(initAutoAnimations, 100);

@@ -41,6 +41,24 @@ const router = createRouter({
       meta: { guest: true },
     },
     {
+      path: "/verify-email",
+      name: "verify-email",
+      component: () => import("@/views/auth/VerifyEmail.vue"),
+      meta: { guest: true },
+    },
+    {
+      path: "/forgot-password",
+      name: "forgot-password",
+      component: () => import("@/views/auth/ForgotPassword.vue"),
+      meta: { guest: true },
+    },
+    {
+      path: "/reset-password",
+      name: "reset-password",
+      component: () => import("@/views/auth/ResetPassword.vue"),
+      meta: { guest: true },
+    },
+    {
       path: "/products",
       name: "products",
       component: () => import("@/views/products/ProductList.vue"),
@@ -338,7 +356,8 @@ router.beforeEach((to, from, next) => {
     if (
       from.name === "home" ||
       from.name === "admin" ||
-      from.name === "vendor"
+      from.name === "vendor" ||
+      from.name === "account-dashboard"
     ) {
       next();
       return;
@@ -350,7 +369,8 @@ router.beforeEach((to, from, next) => {
     } else if (authStore.isVendor) {
       next({ name: "vendor" });
     } else {
-      next({ name: "home" });
+      // Redirect customers to their dashboard
+      next({ name: "account-dashboard" });
     }
     return;
   }

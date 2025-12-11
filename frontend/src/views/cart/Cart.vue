@@ -14,27 +14,61 @@
       <!-- Empty Cart -->
       <div
         v-else-if="!cart || cart.items.length === 0"
-        class="text-center py-12"
+        class="text-center py-20 bg-white rounded-lg shadow-sm"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-24 h-24 mx-auto text-gray-400 mb-4"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-          />
-        </svg>
-        <h2 class="text-2xl font-semibold mb-4">Your cart is empty</h2>
-        <p class="text-gray-600 mb-6">Add some products to get started!</p>
-        <button @click="$router.push('/products')" class="btn btn-primary">
-          Browse Products
-        </button>
+        <div class="max-w-md mx-auto">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1"
+            stroke="currentColor"
+            class="w-32 h-32 mx-auto text-gray-300 mb-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+            />
+          </svg>
+          <h2 class="text-3xl font-bold mb-3 text-gray-900">
+            Your cart is empty
+          </h2>
+          <p class="text-gray-600 mb-8 text-lg">
+            Looks like you haven't added anything to your cart yet. Start
+            shopping to fill it up!
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              @click="$router.push('/products')"
+              class="btn btn-primary px-8 py-3"
+            >
+              🛍️ Start Shopping
+            </button>
+            <button
+              @click="$router.push('/products?sort=newest')"
+              class="btn btn-secondary px-8 py-3"
+            >
+              ✨ View New Arrivals
+            </button>
+          </div>
+
+          <!-- Benefits -->
+          <div class="mt-12 grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div class="text-2xl mb-2">🚚</div>
+              <p class="text-sm text-gray-600">Free Delivery</p>
+            </div>
+            <div>
+              <div class="text-2xl mb-2">🔒</div>
+              <p class="text-sm text-gray-600">Secure Payment</p>
+            </div>
+            <div>
+              <div class="text-2xl mb-2">↩️</div>
+              <p class="text-sm text-gray-600">Easy Returns</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Cart Content -->
@@ -65,15 +99,25 @@
                 @click="goToProduct(item.product)"
                 class="font-semibold text-lg mb-2 cursor-pointer hover:text-primary"
               >
-                {{ item.product?.name || 'Product' }}
+                {{ item.product?.name || "Product" }}
               </h3>
 
               <p v-if="item.variantDetails" class="text-gray-600 text-sm mb-2">
-                Variant: {{ item.variantDetails.size || item.variantDetails.color || item.variantDetails.style || 'Custom' }}
+                Variant:
+                {{
+                  item.variantDetails.size ||
+                  item.variantDetails.color ||
+                  item.variantDetails.style ||
+                  "Custom"
+                }}
               </p>
 
               <p class="text-primary font-bold mb-4">
-                {{ formatCurrency(item.variantDetails?.price || item.product?.price || 0) }}
+                {{
+                  formatCurrency(
+                    item.variantDetails?.price || item.product?.price || 0
+                  )
+                }}
               </p>
 
               <!-- Quantity Controls -->
@@ -115,7 +159,12 @@
             <!-- Item Total -->
             <div class="text-right">
               <p class="font-bold text-xl">
-                {{ formatCurrency((item.variantDetails?.price || item.product.price) * item.quantity) }}
+                {{
+                  formatCurrency(
+                    (item.variantDetails?.price || item.product.price) *
+                      item.quantity
+                  )
+                }}
               </p>
             </div>
           </div>
@@ -195,14 +244,56 @@
 
             <button
               @click="proceedToCheckout"
-              class="btn btn-primary w-full mb-4"
+              class="btn btn-primary w-full mb-3 py-4 text-lg font-semibold"
             >
-              Proceed to Checkout
+              🔒 Proceed to Secure Checkout
             </button>
 
-            <button @click="continueShopping" class="btn btn-secondary w-full">
-              Continue Shopping
+            <div class="text-center mb-4">
+              <p
+                class="text-xs text-gray-500 flex items-center justify-center gap-1"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Secure checkout with 256-bit encryption
+              </p>
+            </div>
+
+            <button
+              @click="continueShopping"
+              class="btn btn-secondary w-full py-3"
+            >
+              ← Continue Shopping
             </button>
+
+            <!-- Trust Badges -->
+            <div class="mt-6 pt-6 border-t space-y-3">
+              <div class="flex items-start gap-3">
+                <div class="text-green-500">✓</div>
+                <div class="text-sm text-gray-600">
+                  <span class="font-medium">Free Delivery</span> on orders over
+                  UGX 50,000
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="text-green-500">✓</div>
+                <div class="text-sm text-gray-600">
+                  <span class="font-medium">Easy Returns</span> within 30 days
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="text-green-500">✓</div>
+                <div class="text-sm text-gray-600">
+                  <span class="font-medium">Secure Payment</span> via Mobile
+                  Money & Cards
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -256,17 +347,18 @@ const updateQuantity = async (item, newQuantity) => {
   updatingItem.value = item._id;
   try {
     // Handle both populated (object) and unpopulated (string ID) product references
-    const productId = typeof item.product === 'string' ? item.product : item.product._id;
-    
-    await cartStore.updateQuantity(
-      productId,
-      qty,
-      item.variantId || null
-    );
+    const productId =
+      typeof item.product === "string" ? item.product : item.product._id;
+
+    await cartStore.updateQuantity(productId, qty, item.variantId || null);
     toast.success("Cart updated");
   } catch (err) {
-    console.error('Update quantity error:', err.response?.data);
-    toast.error(err.response?.data?.error || err.response?.data?.message || "Failed to update cart");
+    console.error("Update quantity error:", err.response?.data);
+    toast.error(
+      err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Failed to update cart"
+    );
   } finally {
     updatingItem.value = null;
   }
@@ -279,15 +371,20 @@ const removeItem = async (item) => {
   removingItem.value = item._id;
   try {
     // Handle both populated (object) and unpopulated (string ID) product references
-    const productId = typeof item.product === 'string' ? item.product : item.product._id;
-    
-    console.log('Removing item:', { productId, variantId: item.variantId });
-    
+    const productId =
+      typeof item.product === "string" ? item.product : item.product._id;
+
+    console.log("Removing item:", { productId, variantId: item.variantId });
+
     await cartStore.removeFromCart(productId, item.variantId || null);
     toast.success("Item removed from cart");
   } catch (err) {
-    console.error('Remove item error:', err.response?.data);
-    toast.error(err.response?.data?.error || err.response?.data?.message || "Failed to remove item");
+    console.error("Remove item error:", err.response?.data);
+    toast.error(
+      err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Failed to remove item"
+    );
   } finally {
     removingItem.value = null;
   }
@@ -322,7 +419,7 @@ const removeCoupon = async () => {
 // Go to product
 const goToProduct = (productOrId) => {
   // Handle both object and string ID
-  const id = typeof productOrId === 'string' ? productOrId : productOrId?._id;
+  const id = typeof productOrId === "string" ? productOrId : productOrId?._id;
   if (id) {
     router.push(`/products/${id}`);
   }
@@ -342,14 +439,14 @@ const proceedToCheckout = () => {
 const getProductImage = (product) => {
   if (product?.images && product.images.length > 0) {
     const img = product.images[0];
-    const url = typeof img === 'string' ? img : img.url;
-    
-    if (url && url.startsWith('/')) {
-      return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${url}`;
+    const url = typeof img === "string" ? img : img.url;
+
+    if (url && url.startsWith("/")) {
+      return `${import.meta.env.VITE_API_URL || "http://localhost:5000"}${url}`;
     }
     return url;
   }
-  return 'data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'128\' height=\'128\' viewBox=\'0 0 128 128\'%3e%3crect width=\'128\' height=\'128\' fill=\'%23e5e7eb\'/%3e%3ctext x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'14\' fill=\'%236b7280\'>No Image</text>%3c/svg%3e';
+  return "data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'%3e%3crect width='128' height='128' fill='%23e5e7eb'/%3e%3ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%236b7280'>No Image</text>%3c/svg%3e";
 };
 
 // Initialize

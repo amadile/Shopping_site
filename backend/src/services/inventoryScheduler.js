@@ -1,6 +1,6 @@
 import { Queue } from "bullmq";
 import { logger } from "../config/logger.js";
-import { redisConnection } from "../config/redis.js";
+import { redisClient as redisConnection } from "../config/redis.js";
 
 /**
  * Inventory Job Scheduler

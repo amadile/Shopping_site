@@ -4,10 +4,7 @@ import { authenticateJWT } from "../middleware/auth.js";
 import Cart from "../models/Cart.js";
 import Coupon from "../models/Coupon.js";
 import Order from "../models/Order.js";
-import {
-  sendOrderConfirmation,
-  sendOrderStatusUpdate,
-} from "../services/emailService.js";
+import emailService from "../services/emailService.js";
 import invoiceService from "../services/invoiceService.js";
 import orderCancellationService from "../services/orderCancellationService.js";
 import trackingService from "../services/trackingService.js";
@@ -138,7 +135,7 @@ router.post("/checkout", authenticateJWT, async (req, res) => {
     });
 
     // Send order confirmation email asynchronously (don't block response)
-    sendOrderConfirmation(req.user, order).catch((err) =>
+    emailService.sendOrderConfirmation(req.user, order).catch((err) =>
       console.error("Order confirmation email failed:", err)
     );
 
@@ -272,7 +269,7 @@ router.put(
 
       // Send email notification if status changed
       if (oldStatus !== req.body.status) {
-        await sendOrderStatusUpdate(order.user, order);
+        await emailService.sendOrderStatusUpdate(order.user, order);
 
         // Send SMS notification based on new status
         if (order.smsNotifications) {

@@ -1,6 +1,18 @@
+import dotenv from "dotenv";
+
+// Load environment variables BEFORE other imports
+if (process.env.NODE_ENV === "test") {
+  dotenv.config({ path: ".env.test" });
+} else {
+  dotenv.config();
+}
+
+import emailService from "./services/emailService.js";
+// Initialize email service with loaded env vars
+emailService.init();
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import { createServer } from "http";
@@ -22,12 +34,6 @@ import {
 import i18nMiddleware from "./middleware/i18n.js";
 import { preventNoSQLInjection, sanitizeInput } from "./middleware/sanitize.js";
 import notificationService from "./services/notificationService.js";
-
-if (process.env.NODE_ENV === "test") {
-  dotenv.config({ path: ".env.test" });
-} else {
-  dotenv.config();
-}
 
 // Security: CORS configuration - Define allowed origins first
 const allowedOrigins = process.env.ALLOWED_ORIGINS
@@ -189,6 +195,7 @@ import userRoutes from "./routes/user.js";
 import vendorRoutes from "./routes/vendor.js";
 import vendorAnalyticsRoutes from "./routes/vendor-analytics.js";
 import vendorPaymentConfigRoutes from "./routes/vendor-payment-config.js";
+import wishlistRoutes from "./routes/wishlist.js";
 
 /**
  * @swagger
@@ -265,6 +272,7 @@ app.use("/api/vendor", vendorAnalyticsRoutes); // Vendor analytics
 app.use("/api/vendor/payment-config", vendorPaymentConfigRoutes); // Vendor payment config
 app.use("/api/payout", payoutsRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 app.use("/uploads", express.static("uploads"));
 
 // Apply CSRF protection to all /api routes except GET, HEAD, OPTIONS

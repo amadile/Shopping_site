@@ -1,21 +1,21 @@
-import express from "express";
 import bcrypt from "bcrypt";
+import express from "express";
+import { body, validationResult } from "express-validator";
+import fs from "fs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import { body, validationResult } from "express-validator";
+import multer from "multer";
+import path from "path";
 import { logger } from "../config/logger.js";
 import { authenticateJWT, authorizeRoles } from "../middleware/auth.js";
 import { authLimiter } from "../middleware/rateLimiter.js";
 import Order from "../models/Order.js";
 import Payout from "../models/Payout.js";
 import Product from "../models/Product.js";
+import Review from "../models/Review.js";
 import User from "../models/User.js";
 import Vendor from "../models/Vendor.js";
-import Review from "../models/Review.js";
 import VendorAnalytics from "../models/VendorAnalytics.js";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
 
 const router = express.Router();
 
@@ -72,15 +72,24 @@ router.post(
   "/register",
   authLimiter,
   [
-    body("businessName").trim().notEmpty().withMessage("Business name is required"),
-    body("businessEmail").isEmail().withMessage("Valid business email is required"),
+    body("businessName")
+      .trim()
+      .notEmpty()
+      .withMessage("Business name is required"),
+    body("businessEmail")
+      .isEmail()
+      .withMessage("Valid business email is required"),
     body("businessPhone").notEmpty().withMessage("Business phone is required"),
-    body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters"),
+    body("password")
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters"),
     body("district").notEmpty().withMessage("District is required"),
     body("zone").optional(),
     body("landmark").optional(),
     body("tinNumber").optional(),
-    body("businessType").isIn(["individual", "company"]).withMessage("Invalid business type"),
+    body("businessType")
+      .isIn(["individual", "company"])
+      .withMessage("Invalid business type"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -159,7 +168,8 @@ router.post(
       user.password = undefined;
 
       res.status(201).json({
-        message: "Vendor registration successful. Please complete your profile.",
+        message:
+          "Vendor registration successful. Please complete your profile.",
         token,
         vendor: {
           id: vendor._id,
@@ -332,7 +342,7 @@ router.post("/register", authenticateJWT, async (req, res) => {
       businessType,
       registrationNumber,
       tinNumber,
-      phoneNumbers
+      phoneNumbers,
     } = req.body;
 
     // Check if user already has a vendor account
@@ -506,8 +516,12 @@ router.get("/dashboard", authenticateJWT, async (req, res) => {
     const recentOrders = await Order.find({
       $or: [
         { vendor: vendor._id },
-        { "items.product": { $in: await Product.find({ vendor: vendor._id }).distinct("_id") } }
-      ]
+        {
+          "items.product": {
+            $in: await Product.find({ vendor: vendor._id }).distinct("_id"),
+          },
+        },
+      ],
     })
       .sort({ createdAt: -1 })
       .limit(10)
@@ -527,12 +541,14 @@ router.get("/dashboard", authenticateJWT, async (req, res) => {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     // Get vendor product IDs for query
-    const vendorProductIds = await Product.find({ vendor: vendor._id }).distinct("_id");
+    const vendorProductIds = await Product.find({
+      vendor: vendor._id,
+    }).distinct("_id");
 
     const periodOrders = await Order.countDocuments({
       $or: [
         { vendor: vendor._id },
-        { "items.product": { $in: vendorProductIds } }
+        { "items.product": { $in: vendorProductIds } },
       ],
       createdAt: { $gte: thirtyDaysAgo },
     });
@@ -616,14 +632,16 @@ router.get("/orders", authenticateJWT, async (req, res) => {
     const skip = (page - 1) * limit;
 
     // Get vendor product IDs for query
-    const vendorProductIds = await Product.find({ vendor: vendor._id }).distinct("_id");
+    const vendorProductIds = await Product.find({
+      vendor: vendor._id,
+    }).distinct("_id");
 
     // Query orders by vendor field or by product vendor
     const query = {
       $or: [
         { vendor: vendor._id },
-        { "items.product": { $in: vendorProductIds } }
-      ]
+        { "items.product": { $in: vendorProductIds } },
+      ],
     };
     if (status) {
       query.status = status;
@@ -639,8 +657,8 @@ router.get("/orders", authenticateJWT, async (req, res) => {
         select: "name price images vendor",
         populate: {
           path: "vendor",
-          select: "businessName"
-        }
+          select: "businessName",
+        },
       });
 
     const total = await Order.countDocuments(query);
@@ -709,16 +727,20 @@ router.put("/orders/:orderId/status", authenticateJWT, async (req, res) => {
     // Populate products to check vendor ownership
     await order.populate({
       path: "items.product",
-      populate: { path: "vendor" }
+      populate: { path: "vendor" },
     });
 
     // Verify vendor owns products in this order
     // Check by order.vendor field or by product.vendor
     const isVendorOrder =
       (order.vendor && order.vendor.toString() === vendor._id.toString()) ||
-      order.items.some(item => {
-        const productVendorId = item.product?.vendor?._id || item.product?.vendor;
-        return productVendorId && productVendorId.toString() === vendor._id.toString();
+      order.items.some((item) => {
+        const productVendorId =
+          item.product?.vendor?._id || item.product?.vendor;
+        return (
+          productVendorId &&
+          productVendorId.toString() === vendor._id.toString()
+        );
       });
 
     if (!isVendorOrder) {
@@ -782,8 +804,8 @@ router.get("/orders/:orderId", authenticateJWT, async (req, res) => {
         select: "name price images vendor",
         populate: {
           path: "vendor",
-          select: "businessName"
-        }
+          select: "businessName",
+        },
       });
 
     if (!order) {
@@ -793,9 +815,13 @@ router.get("/orders/:orderId", authenticateJWT, async (req, res) => {
     // Verify vendor owns products in this order
     const isVendorOrder =
       (order.vendor && order.vendor.toString() === vendor._id.toString()) ||
-      order.items.some(item => {
-        const productVendorId = item.product?.vendor?._id || item.product?.vendor;
-        return productVendorId && productVendorId.toString() === vendor._id.toString();
+      order.items.some((item) => {
+        const productVendorId =
+          item.product?.vendor?._id || item.product?.vendor;
+        return (
+          productVendorId &&
+          productVendorId.toString() === vendor._id.toString()
+        );
       });
 
     if (!isVendorOrder) {
@@ -832,6 +858,67 @@ router.get("/orders/:orderId", authenticateJWT, async (req, res) => {
  *       200:
  *         description: Analytics chart data
  */
+// Ad-blocker safe endpoint
+router.get("/stats/chart", authenticateJWT, async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ user: req.user._id });
+    if (!vendor) {
+      return res.status(404).json({ error: "Vendor not found" });
+    }
+
+    const { startDate, endDate } = req.query;
+    const end = endDate ? new Date(endDate) : new Date();
+    const start = startDate ? new Date(startDate) : new Date();
+
+    if (!startDate) {
+      start.setDate(end.getDate() - 30); // Default to last 30 days
+    }
+
+    // Ensure dates are valid
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({ error: "Invalid date format" });
+    }
+
+    const analytics = await VendorAnalytics.getAnalytics(
+      vendor._id,
+      start,
+      end
+    );
+
+    // Fill in missing dates with zero values
+    const result = [];
+    const current = new Date(start);
+    const analyticsMap = new Map(
+      analytics.map((a) => [a.date.toISOString().split("T")[0], a])
+    );
+
+    while (current <= end) {
+      const dateStr = current.toISOString().split("T")[0];
+      const data = analyticsMap.get(dateStr) || {
+        date: new Date(current),
+        revenue: 0,
+        orders: 0,
+        shopViews: 0,
+        productViews: 0,
+      };
+
+      result.push({
+        date: dateStr,
+        revenue: data.revenue || 0,
+        orders: data.orders || 0,
+        views: (data.shopViews || 0) + (data.productViews || 0),
+      });
+
+      current.setDate(current.getDate() + 1);
+    }
+
+    res.json(result);
+  } catch (error) {
+    logger.error("Get stats chart error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 router.get("/analytics/chart", authenticateJWT, async (req, res) => {
   try {
     const vendor = await Vendor.findOne({ user: req.user._id });
@@ -852,28 +939,34 @@ router.get("/analytics/chart", authenticateJWT, async (req, res) => {
       return res.status(400).json({ error: "Invalid date format" });
     }
 
-    const analytics = await VendorAnalytics.getAnalytics(vendor._id, start, end);
+    const analytics = await VendorAnalytics.getAnalytics(
+      vendor._id,
+      start,
+      end
+    );
 
     // Fill in missing dates with zero values
     const result = [];
     const current = new Date(start);
-    const analyticsMap = new Map(analytics.map(a => [a.date.toISOString().split('T')[0], a]));
+    const analyticsMap = new Map(
+      analytics.map((a) => [a.date.toISOString().split("T")[0], a])
+    );
 
     while (current <= end) {
-      const dateStr = current.toISOString().split('T')[0];
+      const dateStr = current.toISOString().split("T")[0];
       const data = analyticsMap.get(dateStr) || {
         date: new Date(current),
         revenue: 0,
         orders: 0,
         shopViews: 0,
-        productViews: 0
+        productViews: 0,
       };
 
       result.push({
         date: dateStr,
         revenue: data.revenue || 0,
         orders: data.orders || 0,
-        views: (data.shopViews || 0) + (data.productViews || 0)
+        views: (data.shopViews || 0) + (data.productViews || 0),
       });
 
       current.setDate(current.getDate() + 1);
@@ -903,6 +996,38 @@ router.get("/analytics/chart", authenticateJWT, async (req, res) => {
  *       200:
  *         description: Analytics summary
  */
+// Ad-blocker safe endpoint
+router.get("/stats/summary", authenticateJWT, async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ user: req.user._id });
+    if (!vendor) {
+      return res.status(404).json({ error: "Vendor not found" });
+    }
+
+    const days = parseInt(req.query.days) || 30;
+    logger.info(
+      `Fetching stats summary for vendor ${vendor._id} (User: ${req.user._id}) for last ${days} days`
+    );
+
+    const stats = await VendorAnalytics.getAggregatedStats(vendor._id, days);
+    logger.info(`Stats result: ${JSON.stringify(stats)}`);
+
+    res.json(
+      stats || {
+        totalRevenue: 0,
+        totalOrders: 0,
+        totalShopViews: 0,
+        totalProductClicks: 0,
+        totalReviews: 0,
+        totalAddToCart: 0,
+      }
+    );
+  } catch (error) {
+    logger.error("Get stats summary error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 router.get("/analytics/summary", authenticateJWT, async (req, res) => {
   try {
     const vendor = await Vendor.findOne({ user: req.user._id });
@@ -911,19 +1036,23 @@ router.get("/analytics/summary", authenticateJWT, async (req, res) => {
     }
 
     const days = parseInt(req.query.days) || 30;
-    logger.info(`Fetching analytics summary for vendor ${vendor._id} (User: ${req.user._id}) for last ${days} days`);
+    logger.info(
+      `Fetching analytics summary for vendor ${vendor._id} (User: ${req.user._id}) for last ${days} days`
+    );
 
     const stats = await VendorAnalytics.getAggregatedStats(vendor._id, days);
     logger.info(`Analytics stats result: ${JSON.stringify(stats)}`);
 
-    res.json(stats || {
-      totalRevenue: 0,
-      totalOrders: 0,
-      totalShopViews: 0,
-      totalProductClicks: 0,
-      totalReviews: 0,
-      totalAddToCart: 0
-    });
+    res.json(
+      stats || {
+        totalRevenue: 0,
+        totalOrders: 0,
+        totalShopViews: 0,
+        totalProductClicks: 0,
+        totalReviews: 0,
+        totalAddToCart: 0,
+      }
+    );
   } catch (error) {
     logger.error("Get analytics summary error:", error);
     res.status(500).json({ error: "Server error" });
@@ -951,25 +1080,42 @@ router.get("/orders/stats", authenticateJWT, async (req, res) => {
     }
 
     // Get vendor product IDs
-    const vendorProductIds = await Product.find({ vendor: vendor._id }).distinct("_id");
+    const vendorProductIds = await Product.find({
+      vendor: vendor._id,
+    }).distinct("_id");
 
     // Query for vendor orders
     const orderQuery = {
       $or: [
         { vendor: vendor._id },
-        { "items.product": { $in: vendorProductIds } }
-      ]
+        { "items.product": { $in: vendorProductIds } },
+      ],
     };
 
     // Total orders
     const totalOrders = await Order.countDocuments(orderQuery);
 
     // Orders by status
-    const pendingOrders = await Order.countDocuments({ ...orderQuery, status: "pending" });
-    const paidOrders = await Order.countDocuments({ ...orderQuery, status: "paid" });
-    const shippedOrders = await Order.countDocuments({ ...orderQuery, status: "shipped" });
-    const deliveredOrders = await Order.countDocuments({ ...orderQuery, status: "delivered" });
-    const cancelledOrders = await Order.countDocuments({ ...orderQuery, status: "cancelled" });
+    const pendingOrders = await Order.countDocuments({
+      ...orderQuery,
+      status: "pending",
+    });
+    const paidOrders = await Order.countDocuments({
+      ...orderQuery,
+      status: "paid",
+    });
+    const shippedOrders = await Order.countDocuments({
+      ...orderQuery,
+      status: "shipped",
+    });
+    const deliveredOrders = await Order.countDocuments({
+      ...orderQuery,
+      status: "delivered",
+    });
+    const cancelledOrders = await Order.countDocuments({
+      ...orderQuery,
+      status: "cancelled",
+    });
 
     // This month's orders
     const startOfMonth = new Date();
@@ -978,18 +1124,24 @@ router.get("/orders/stats", authenticateJWT, async (req, res) => {
 
     const thisMonthOrders = await Order.countDocuments({
       ...orderQuery,
-      createdAt: { $gte: startOfMonth }
+      createdAt: { $gte: startOfMonth },
     });
 
     // Calculate revenue from orders
     const orders = await Order.find(orderQuery);
-    const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+    const totalRevenue = orders.reduce(
+      (sum, order) => sum + (order.total || 0),
+      0
+    );
 
     const thisMonthOrdersData = await Order.find({
       ...orderQuery,
-      createdAt: { $gte: startOfMonth }
+      createdAt: { $gte: startOfMonth },
     });
-    const thisMonthRevenue = thisMonthOrdersData.reduce((sum, order) => sum + (order.total || 0), 0);
+    const thisMonthRevenue = thisMonthOrdersData.reduce(
+      (sum, order) => sum + (order.total || 0),
+      0
+    );
 
     const stats = {
       totalOrders,
@@ -1001,7 +1153,7 @@ router.get("/orders/stats", authenticateJWT, async (req, res) => {
       totalRevenue,
       thisMonthOrders,
       thisMonthRevenue,
-      averageOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0
+      averageOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
     };
 
     res.json({ stats });
@@ -1118,14 +1270,16 @@ router.get("/analytics", authenticateJWT, async (req, res) => {
     }
 
     // Get vendor product IDs for aggregation
-    const vendorProductIds = await Product.find({ vendor: vendor._id }).distinct("_id");
+    const vendorProductIds = await Product.find({
+      vendor: vendor._id,
+    }).distinct("_id");
 
     const salesTrend = await Order.aggregate([
       {
         $match: {
           $or: [
             { vendor: vendor._id },
-            { "items.product": { $in: vendorProductIds } }
+            { "items.product": { $in: vendorProductIds } },
           ],
           createdAt: { $gte: startDate },
         },
@@ -1339,7 +1493,7 @@ router.get("/earnings", authenticateJWT, async (req, res) => {
       netRevenue: vendor.netRevenue || 0,
       pendingPayout: vendor.pendingPayout || 0,
       totalPaidOut: vendor.totalPaidOut || 0,
-      currency: "UGX"
+      currency: "UGX",
     };
 
     res.json({ earnings });
@@ -1348,7 +1502,6 @@ router.get("/earnings", authenticateJWT, async (req, res) => {
     res.status(500).json({ error: req.t("error.serverError") });
   }
 });
-
 
 /**
  * @swagger
@@ -1386,13 +1539,15 @@ router.get("/sales-report", authenticateJWT, async (req, res) => {
     if (endDate) dateFilter.$lte = new Date(endDate);
 
     // Get vendor product IDs for query
-    const vendorProductIds = await Product.find({ vendor: vendor._id }).distinct("_id");
+    const vendorProductIds = await Product.find({
+      vendor: vendor._id,
+    }).distinct("_id");
 
     const query = {
       $or: [
         { vendor: vendor._id },
-        { "items.product": { $in: vendorProductIds } }
-      ]
+        { "items.product": { $in: vendorProductIds } },
+      ],
     };
     if (Object.keys(dateFilter).length > 0) {
       query.createdAt = dateFilter;
@@ -1431,8 +1586,12 @@ router.get("/sales-report", authenticateJWT, async (req, res) => {
     orders.forEach((order) => {
       order.items.forEach((item) => {
         // Check if product belongs to this vendor
-        const productVendorId = item.product?.vendor?._id || item.product?.vendor;
-        if (productVendorId && productVendorId.toString() === vendor._id.toString()) {
+        const productVendorId =
+          item.product?.vendor?._id || item.product?.vendor;
+        if (
+          productVendorId &&
+          productVendorId.toString() === vendor._id.toString()
+        ) {
           const productId = item.product._id.toString();
           if (!productSales[productId]) {
             productSales[productId] = {
@@ -1670,10 +1829,10 @@ const documentStorage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     cb(null, `vendor-${req.user._id}-${uniqueSuffix}${ext}`);
-  }
+  },
 });
 
 const documentUpload = multer({
@@ -1682,20 +1841,24 @@ const documentUpload = multer({
   fileFilter: (req, file, cb) => {
     // Allow common document types
     const allowedTypes = [
-      'application/pdf',
-      'image/jpeg',
-      'image/png',
-      'image/jpg',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      "application/pdf",
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
 
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type. Only PDF, JPEG, PNG, and Word documents are allowed.'));
+      cb(
+        new Error(
+          "Invalid file type. Only PDF, JPEG, PNG, and Word documents are allowed."
+        )
+      );
     }
-  }
+  },
 });
 
 /**
@@ -1729,78 +1892,89 @@ const documentUpload = multer({
  *       500:
  *         description: Server error
  */
-router.post("/documents/upload", authenticateJWT, documentUpload.single('document'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No document file uploaded" });
-    }
-
-    const { documentType } = req.body;
-
-    // Validate document type
-    const validDocumentTypes = ["business_license", "tax_id", "identity", "other"];
-    if (!documentType || !validDocumentTypes.includes(documentType)) {
-      // Delete uploaded file
-      if (req.file && req.file.path) {
-        try {
-          fs.unlinkSync(req.file.path);
-        } catch (e) {
-          // Ignore deletion errors
-        }
+router.post(
+  "/documents/upload",
+  authenticateJWT,
+  documentUpload.single("document"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No document file uploaded" });
       }
-      return res.status(400).json({
-        error: "Invalid document type. Must be one of: business_license, tax_id, identity, other"
-      });
-    }
 
-    // Find vendor
-    const vendor = await Vendor.findOne({ user: req.user._id });
-    if (!vendor) {
-      // Delete uploaded file
-      if (req.file && req.file.path) {
-        try {
-          fs.unlinkSync(req.file.path);
-        } catch (e) {
-          // Ignore deletion errors
+      const { documentType } = req.body;
+
+      // Validate document type
+      const validDocumentTypes = [
+        "business_license",
+        "tax_id",
+        "identity",
+        "other",
+      ];
+      if (!documentType || !validDocumentTypes.includes(documentType)) {
+        // Delete uploaded file
+        if (req.file && req.file.path) {
+          try {
+            fs.unlinkSync(req.file.path);
+          } catch (e) {
+            // Ignore deletion errors
+          }
         }
+        return res.status(400).json({
+          error:
+            "Invalid document type. Must be one of: business_license, tax_id, identity, other",
+        });
       }
-      return res.status(404).json({ error: "Vendor not found" });
-    }
 
-    // Create document URL (relative to server)
-    const documentUrl = `/uploads/vendor-documents/${req.file.filename}`;
+      // Find vendor
+      const vendor = await Vendor.findOne({ user: req.user._id });
+      if (!vendor) {
+        // Delete uploaded file
+        if (req.file && req.file.path) {
+          try {
+            fs.unlinkSync(req.file.path);
+          } catch (e) {
+            // Ignore deletion errors
+          }
+        }
+        return res.status(404).json({ error: "Vendor not found" });
+      }
 
-    // Add document to vendor's verificationDocuments array
-    vendor.verificationDocuments.push({
-      url: documentUrl,
-      documentType: documentType,
-      uploadedAt: new Date()
-    });
+      // Create document URL (relative to server)
+      const documentUrl = `/uploads/vendor-documents/${req.file.filename}`;
 
-    await vendor.save();
-
-    res.status(200).json({
-      message: "Document uploaded successfully",
-      document: {
+      // Add document to vendor's verificationDocuments array
+      vendor.verificationDocuments.push({
         url: documentUrl,
-        type: documentType,
-        uploadedAt: new Date()
-      }
-    });
-  } catch (error) {
-    // Delete uploaded file on error
-    if (req.file && req.file.path) {
-      try {
-        fs.unlinkSync(req.file.path);
-      } catch (e) {
-        // Ignore deletion errors
-      }
-    }
+        documentType: documentType,
+        uploadedAt: new Date(),
+      });
 
-    console.error("Document upload error:", error);
-    res.status(500).json({ error: "Server error during document upload" });
+      await vendor.save();
+
+      res.status(200).json({
+        message: "Document uploaded successfully",
+        document: {
+          url: documentUrl,
+          type: documentType,
+          uploadedAt: new Date(),
+        },
+      });
+    } catch (error) {
+      // Delete uploaded file on error
+      if (req.file && req.file.path) {
+        try {
+          fs.unlinkSync(req.file.path);
+        } catch (e) {
+          // Ignore deletion errors
+        }
+      }
+
+      console.error("Document upload error:", error);
+      res.status(500).json({ error: "Server error during document upload" });
+    }
   }
-});
+);
 
 // Public Vendor Routes
 
@@ -1837,7 +2011,7 @@ router.get("/reviews", authenticateJWT, async (req, res) => {
 
     const reviews = await Review.find({
       vendor: vendor._id,
-      moderationStatus: "approved"
+      moderationStatus: "approved",
     })
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
@@ -1846,7 +2020,7 @@ router.get("/reviews", authenticateJWT, async (req, res) => {
 
     const total = await Review.countDocuments({
       vendor: vendor._id,
-      moderationStatus: "approved"
+      moderationStatus: "approved",
     });
 
     res.json({
@@ -1863,7 +2037,6 @@ router.get("/reviews", authenticateJWT, async (req, res) => {
     res.status(500).json({ error: req.t("error.serverError") });
   }
 });
-
 
 /**
  * @swagger
@@ -1890,7 +2063,9 @@ router.get("/:vendorId", async (req, res) => {
     }
 
     const vendor = await Vendor.findById(vendorId)
-      .select("-payoutInfo -verificationDocuments -totalRevenue -totalCommission -pendingPayout -metrics")
+      .select(
+        "-payoutInfo -verificationDocuments -totalRevenue -totalCommission -pendingPayout -metrics"
+      )
       .populate("user", "name");
 
     if (!vendor) {
@@ -1898,12 +2073,14 @@ router.get("/:vendorId", async (req, res) => {
     }
 
     if (!vendor.storeSettings.isActive) {
-      return res.status(404).json({ error: "Vendor store is currently inactive" });
+      return res
+        .status(404)
+        .json({ error: "Vendor store is currently inactive" });
     }
 
     // Track shop view
     const userId = req.user ? req.user._id : null;
-    VendorAnalytics.recordShopView(vendorId, userId).catch(err =>
+    VendorAnalytics.recordShopView(vendorId, userId).catch((err) =>
       logger.error("Analytics tracking error:", err)
     );
 
@@ -1939,7 +2116,16 @@ router.get("/:vendorId", async (req, res) => {
 router.get("/:vendorId/products", async (req, res) => {
   try {
     const { vendorId } = req.params;
-    const { page = 1, limit = 20, category, search, sort, minPrice, maxPrice, minRating } = req.query;
+    const {
+      page = 1,
+      limit = 20,
+      category,
+      search,
+      sort,
+      minPrice,
+      maxPrice,
+      minRating,
+    } = req.query;
 
     if (!mongoose.Types.ObjectId.isValid(vendorId)) {
       return res.status(400).json({ error: "Invalid vendor ID" });
@@ -1947,7 +2133,7 @@ router.get("/:vendorId/products", async (req, res) => {
 
     const query = {
       vendor: vendorId,
-      isActive: true
+      isActive: true,
     };
 
     if (category) query.category = category;
@@ -2017,7 +2203,7 @@ router.get("/:vendorId/reviews", async (req, res) => {
 
     const reviews = await Review.find({
       vendor: vendorId,
-      moderationStatus: "approved"
+      moderationStatus: "approved",
     })
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
@@ -2026,7 +2212,7 @@ router.get("/:vendorId/reviews", async (req, res) => {
 
     const total = await Review.countDocuments({
       vendor: vendorId,
-      moderationStatus: "approved"
+      moderationStatus: "approved",
     });
 
     res.json({
@@ -2081,11 +2267,13 @@ router.post("/:vendorId/reviews", authenticateJWT, async (req, res) => {
     // Check if user has already reviewed this vendor
     const existingReview = await Review.findOne({
       vendor: vendorId,
-      user: req.user._id
+      user: req.user._id,
     });
 
     if (existingReview) {
-      return res.status(400).json({ error: "You have already reviewed this vendor" });
+      return res
+        .status(400)
+        .json({ error: "You have already reviewed this vendor" });
     }
 
     // Verify vendor exists
@@ -2100,21 +2288,26 @@ router.post("/:vendorId/reviews", authenticateJWT, async (req, res) => {
       user: req.user._id,
       rating,
       comment,
-      moderationStatus: "approved" // Auto-approve for now, or use "pending" if moderation is required
+      moderationStatus: "approved", // Auto-approve for now, or use "pending" if moderation is required
     });
 
     await review.save();
 
     // Update vendor rating stats
     const stats = await Review.aggregate([
-      { $match: { vendor: new mongoose.Types.ObjectId(vendorId), moderationStatus: "approved" } },
+      {
+        $match: {
+          vendor: new mongoose.Types.ObjectId(vendorId),
+          moderationStatus: "approved",
+        },
+      },
       {
         $group: {
           _id: "$vendor",
           avgRating: { $avg: "$rating" },
-          count: { $sum: 1 }
-        }
-      }
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     if (stats.length > 0) {
@@ -2125,7 +2318,7 @@ router.post("/:vendorId/reviews", authenticateJWT, async (req, res) => {
 
     res.status(201).json({
       message: "Review submitted successfully",
-      review
+      review,
     });
   } catch (error) {
     logger.error("Add vendor review error:", error);
@@ -2222,7 +2415,13 @@ router.post("/payouts/request", authenticateJWT, async (req, res) => {
     }
 
     // Validate payment method
-    const validMethods = ["bank", "paypal", "stripe", "mtn_momo", "airtel_money"];
+    const validMethods = [
+      "bank",
+      "paypal",
+      "stripe",
+      "mtn_momo",
+      "airtel_money",
+    ];
     if (!validMethods.includes(paymentMethod)) {
       return res.status(400).json({ error: "Invalid payment method" });
     }
@@ -2338,7 +2537,7 @@ router.delete("/payouts/:id", authenticateJWT, async (req, res) => {
 // BULK PRODUCT OPERATIONS
 // ============================================
 
-import { parseProductCSV, generateProductCSV } from "../utils/csvParser.js";
+import { generateProductCSV, parseProductCSV } from "../utils/csvParser.js";
 
 // Configure multer for CSV upload
 const csvStorage = multer.memoryStorage();
@@ -2346,12 +2545,12 @@ const csvUpload = multer({
   storage: csvStorage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'text/csv' || file.originalname.endsWith('.csv')) {
+    if (file.mimetype === "text/csv" || file.originalname.endsWith(".csv")) {
       cb(null, true);
     } else {
-      cb(new Error('Only CSV files are allowed'));
+      cb(new Error("Only CSV files are allowed"));
     }
-  }
+  },
 });
 
 /**
@@ -2375,70 +2574,83 @@ const csvUpload = multer({
  *       201:
  *         description: Products uploaded successfully
  */
-router.post("/products/bulk-upload", authenticateJWT, csvUpload.single('file'), async (req, res) => {
-  try {
-    const vendor = await Vendor.findOne({ user: req.user._id });
-    if (!vendor) {
-      return res.status(404).json({ error: "Vendor not found" });
-    }
+router.post(
+  "/products/bulk-upload",
+  authenticateJWT,
+  csvUpload.single("file"),
+  async (req, res) => {
+    try {
+      const vendor = await Vendor.findOne({ user: req.user._id });
+      if (!vendor) {
+        return res.status(404).json({ error: "Vendor not found" });
+      }
 
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
 
-    // Parse CSV
-    const csvText = req.file.buffer.toString('utf-8');
-    const { products, errors } = parseProductCSV(csvText);
+      // Parse CSV
+      const csvText = req.file.buffer.toString("utf-8");
+      const { products, errors } = parseProductCSV(csvText);
 
-    if (errors.length > 0 && products.length === 0) {
-      return res.status(400).json({
-        error: "CSV validation failed",
-        errors
-      });
-    }
-
-    // Create products
-    const createdProducts = [];
-    const failedProducts = [];
-
-    for (const productData of products) {
-      try {
-        const product = new Product({
-          ...productData,
-          vendor: vendor._id
-        });
-        await product.save();
-        createdProducts.push(product);
-      } catch (error) {
-        failedProducts.push({
-          name: productData.name,
-          error: error.message
+      if (errors.length > 0 && products.length === 0) {
+        return res.status(400).json({
+          error: "CSV validation failed",
+          errors,
         });
       }
+
+      // Create products
+      const createdProducts = [];
+      const failedProducts = [];
+
+      for (const productData of products) {
+        try {
+          const product = new Product({
+            ...productData,
+            vendor: vendor._id,
+          });
+          await product.save();
+          createdProducts.push(product);
+        } catch (error) {
+          failedProducts.push({
+            name: productData.name,
+            error: error.message,
+          });
+        }
+      }
+
+      // Update vendor product count
+      vendor.totalProducts = await Product.countDocuments({
+        vendor: vendor._id,
+      });
+      await vendor.save();
+
+      logger.info(
+        `Bulk upload: ${createdProducts.length} products created for vendor ${vendor.businessName}`,
+        {
+          vendorId: vendor._id,
+          created: createdProducts.length,
+          failed: failedProducts.length,
+        }
+      );
+
+      res.status(201).json({
+        message: `Successfully uploaded ${createdProducts.length} products`,
+        created: createdProducts.length,
+        failed: failedProducts.length,
+        errors: [
+          ...errors,
+          ...failedProducts.map((f) => `${f.name}: ${f.error}`),
+        ],
+        products: createdProducts,
+      });
+    } catch (error) {
+      logger.error("Bulk upload error:", error);
+      res.status(500).json({ error: "Server error" });
     }
-
-    // Update vendor product count
-    vendor.totalProducts = await Product.countDocuments({ vendor: vendor._id });
-    await vendor.save();
-
-    logger.info(`Bulk upload: ${createdProducts.length} products created for vendor ${vendor.businessName}`, {
-      vendorId: vendor._id,
-      created: createdProducts.length,
-      failed: failedProducts.length
-    });
-
-    res.status(201).json({
-      message: `Successfully uploaded ${createdProducts.length} products`,
-      created: createdProducts.length,
-      failed: failedProducts.length,
-      errors: [...errors, ...failedProducts.map(f => `${f.name}: ${f.error}`)],
-      products: createdProducts
-    });
-  } catch (error) {
-    logger.error("Bulk upload error:", error);
-    res.status(500).json({ error: "Server error" });
   }
-});
+);
 
 /**
  * @swagger
@@ -2478,33 +2690,36 @@ router.post("/products/bulk-delete", authenticateJWT, async (req, res) => {
     // Verify all products belong to vendor
     const products = await Product.find({
       _id: { $in: productIds },
-      vendor: vendor._id
+      vendor: vendor._id,
     });
 
     if (products.length !== productIds.length) {
       return res.status(403).json({
-        error: "Some products do not belong to this vendor"
+        error: "Some products do not belong to this vendor",
       });
     }
 
     // Delete products
     const result = await Product.deleteMany({
       _id: { $in: productIds },
-      vendor: vendor._id
+      vendor: vendor._id,
     });
 
     // Update vendor product count
     vendor.totalProducts = await Product.countDocuments({ vendor: vendor._id });
     await vendor.save();
 
-    logger.info(`Bulk delete: ${result.deletedCount} products deleted for vendor ${vendor.businessName}`, {
-      vendorId: vendor._id,
-      count: result.deletedCount
-    });
+    logger.info(
+      `Bulk delete: ${result.deletedCount} products deleted for vendor ${vendor.businessName}`,
+      {
+        vendorId: vendor._id,
+        count: result.deletedCount,
+      }
+    );
 
     res.json({
       message: `Successfully deleted ${result.deletedCount} products`,
-      deletedCount: result.deletedCount
+      deletedCount: result.deletedCount,
     });
   } catch (error) {
     logger.error("Bulk delete error:", error);
@@ -2549,15 +2764,15 @@ router.post("/products/bulk-update", authenticateJWT, async (req, res) => {
       return res.status(400).json({ error: "Product IDs array is required" });
     }
 
-    if (!updates || typeof updates !== 'object') {
+    if (!updates || typeof updates !== "object") {
       return res.status(400).json({ error: "Updates object is required" });
     }
 
     // Only allow certain fields to be bulk updated
-    const allowedFields = ['isActive', 'category', 'stock'];
+    const allowedFields = ["isActive", "category", "stock"];
     const updateData = {};
 
-    Object.keys(updates).forEach(key => {
+    Object.keys(updates).forEach((key) => {
       if (allowedFields.includes(key)) {
         updateData[key] = updates[key];
       }
@@ -2565,7 +2780,7 @@ router.post("/products/bulk-update", authenticateJWT, async (req, res) => {
 
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({
-        error: `No valid update fields. Allowed: ${allowedFields.join(', ')}`
+        error: `No valid update fields. Allowed: ${allowedFields.join(", ")}`,
       });
     }
 
@@ -2573,20 +2788,23 @@ router.post("/products/bulk-update", authenticateJWT, async (req, res) => {
     const result = await Product.updateMany(
       {
         _id: { $in: productIds },
-        vendor: vendor._id
+        vendor: vendor._id,
       },
       { $set: updateData }
     );
 
-    logger.info(`Bulk update: ${result.modifiedCount} products updated for vendor ${vendor.businessName}`, {
-      vendorId: vendor._id,
-      count: result.modifiedCount,
-      updates: updateData
-    });
+    logger.info(
+      `Bulk update: ${result.modifiedCount} products updated for vendor ${vendor.businessName}`,
+      {
+        vendorId: vendor._id,
+        count: result.modifiedCount,
+        updates: updateData,
+      }
+    );
 
     res.json({
       message: `Successfully updated ${result.modifiedCount} products`,
-      modifiedCount: result.modifiedCount
+      modifiedCount: result.modifiedCount,
     });
   } catch (error) {
     logger.error("Bulk update error:", error);
@@ -2619,7 +2837,7 @@ router.get("/products/export", authenticateJWT, async (req, res) => {
 
     // Get all vendor products
     const products = await Product.find({ vendor: vendor._id })
-      .select('name description price category stock sku images isActive')
+      .select("name description price category stock sku images isActive")
       .lean();
 
     if (products.length === 0) {
@@ -2630,8 +2848,11 @@ router.get("/products/export", authenticateJWT, async (req, res) => {
     const csv = generateProductCSV(products);
 
     // Set headers for file download
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename="products-${Date.now()}.csv"`);
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="products-${Date.now()}.csv"`
+    );
 
     res.send(csv);
   } catch (error) {
@@ -2650,7 +2871,9 @@ router.get("/products/export", authenticateJWT, async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id)
-      .select('businessName description logo banner rating totalReviews address')
+      .select(
+        "businessName description logo banner rating totalReviews address"
+      )
       .lean();
 
     if (!vendor) {
@@ -2658,7 +2881,7 @@ router.get("/:id", async (req, res) => {
     }
 
     // Only show approved vendors to public
-    if (vendor.verificationStatus !== 'approved') {
+    if (vendor.verificationStatus !== "approved") {
       return res.status(404).json({ error: "Vendor not found" });
     }
 
@@ -2679,16 +2902,16 @@ router.get("/:id/products", async (req, res) => {
 
     const products = await Product.find({
       vendor: req.params.id,
-      isActive: true
+      isActive: true,
     })
-      .select('name price images stockQuantity category')
+      .select("name price images stockQuantity category")
       .skip(skip)
       .limit(parseInt(limit))
       .lean();
 
     const total = await Product.countDocuments({
       vendor: req.params.id,
-      isActive: true
+      isActive: true,
     });
 
     res.json({
@@ -2712,9 +2935,9 @@ router.get("/:id/products", async (req, res) => {
 router.get("/:id/reviews", async (req, res) => {
   try {
     const reviews = await Review.find({
-      vendor: req.params.id
+      vendor: req.params.id,
     })
-      .populate('user', 'name')
+      .populate("user", "name")
       .sort({ createdAt: -1 })
       .limit(50)
       .lean();
@@ -2753,14 +2976,15 @@ router.post("/:id/reviews", authenticateJWT, async (req, res) => {
 
     // Update vendor rating
     const reviews = await Review.find({ vendor: req.params.id });
-    const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    const avgRating =
+      reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
     vendor.rating = avgRating;
     vendor.totalReviews = reviews.length;
     await vendor.save();
 
     res.status(201).json({
       message: "Review submitted successfully",
-      review
+      review,
     });
   } catch (error) {
     logger.error("Submit vendor review error:", error);

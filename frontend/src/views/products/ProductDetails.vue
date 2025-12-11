@@ -1,6 +1,19 @@
 <template>
   <DefaultLayout>
     <div class="max-w-7xl mx-auto px-4 py-8">
+      <!-- Breadcrumb Navigation -->
+      <nav class="flex mb-6 text-sm text-gray-500">
+        <router-link to="/" class="hover:text-primary">Home</router-link>
+        <span class="mx-2">/</span>
+        <router-link to="/products" class="hover:text-primary"
+          >Products</router-link
+        >
+        <span class="mx-2">/</span>
+        <span v-if="product" class="text-gray-900 font-medium">{{
+          product.name
+        }}</span>
+      </nav>
+
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
         <div
@@ -41,7 +54,9 @@
               :key="index"
               @click="selectedImage = getImageUrl(image)"
               class="relative pb-[100%] bg-gray-200 rounded cursor-pointer overflow-hidden"
-              :class="{ 'ring-2 ring-primary': selectedImage === getImageUrl(image) }"
+              :class="{
+                'ring-2 ring-primary': selectedImage === getImageUrl(image),
+              }"
             >
               <img
                 :src="getImageUrl(image)"
@@ -58,14 +73,18 @@
 
           <!-- Rating -->
           <div class="flex items-center mb-4">
-            <StarRating 
-              :rating="product.averageRating || 0" 
+            <StarRating
+              :rating="product.averageRating || 0"
               :show-count="false"
               size="md"
               readonly
             />
             <span class="text-gray-600 ml-2">
-              {{ product.averageRating ? product.averageRating.toFixed(1) : '0.0' }} ({{ product.reviewCount || 0 }} {{ product.reviewCount === 1 ? 'review' : 'reviews' }})
+              {{
+                product.averageRating ? product.averageRating.toFixed(1) : "0.0"
+              }}
+              ({{ product.reviewCount || 0 }}
+              {{ product.reviewCount === 1 ? "review" : "reviews" }})
             </span>
           </div>
 
@@ -189,7 +208,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Left Column: Summary & Form -->
           <div class="lg:col-span-1 space-y-8">
-            <ReviewSummary 
+            <ReviewSummary
               :reviews="reviews"
               :average-rating="product.averageRating || 0"
               :total-reviews="product.reviewCount || 0"
@@ -197,8 +216,8 @@
               @write-review="showReviewForm = true"
               @filter-rating="filterRating = $event"
             />
-            
-            <ReviewForm 
+
+            <ReviewForm
               v-if="showReviewForm"
               :product-id="product._id"
               @success="handleReviewSuccess"
@@ -210,8 +229,8 @@
           <div class="lg:col-span-2">
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-2xl font-bold">Customer Reviews</h2>
-              <button 
-                v-if="filterRating" 
+              <button
+                v-if="filterRating"
                 @click="filterRating = null"
                 class="text-sm text-primary hover:underline"
               >
@@ -219,7 +238,7 @@
               </button>
             </div>
 
-            <ReviewList 
+            <ReviewList
               ref="reviewListRef"
               :product-id="product._id"
               :filter-rating="filterRating"
@@ -233,21 +252,17 @@
 
 <script setup>
 import DefaultLayout from "@/components/layouts/DefaultLayout.vue";
+import ReviewForm from "@/components/ReviewForm.vue";
+import ReviewList from "@/components/ReviewList.vue";
+import ReviewSummary from "@/components/ReviewSummary.vue";
+import StarRating from "@/components/StarRating.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useCartStore } from "@/stores/cart";
 import api from "@/utils/api";
-import {
-  calculateDiscount,
-  formatCurrency,
-  formatRelativeTime,
-} from "@/utils/helpers";
+import { calculateDiscount, formatCurrency } from "@/utils/helpers";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import StarRating from "@/components/StarRating.vue";
-import ReviewSummary from "@/components/ReviewSummary.vue";
-import ReviewList from "@/components/ReviewList.vue";
-import ReviewForm from "@/components/ReviewForm.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -343,10 +358,10 @@ const handleReviewSuccess = async (newReview) => {
 };
 
 const getImageUrl = (path) => {
-  if (!path) return '';
-  const url = typeof path === 'string' ? path : path.url;
-  if (url && url.startsWith('/')) {
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${url}`;
+  if (!path) return "";
+  const url = typeof path === "string" ? path : path.url;
+  if (url && url.startsWith("/")) {
+    return `${import.meta.env.VITE_API_URL || "http://localhost:5000"}${url}`;
   }
   return url;
 };

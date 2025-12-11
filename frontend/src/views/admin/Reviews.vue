@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-bold text-gray-900">Review Moderation</h1>
       <div class="header-actions">
         <div class="tabs">
-          <button 
+          <button
             v-for="status in ['pending', 'approved', 'rejected', 'flagged']"
             :key="status"
             @click="currentStatus = status"
@@ -23,6 +23,18 @@
       <p>Loading reviews...</p>
     </div>
 
+    <!-- Error State -->
+    <div v-else-if="error" class="empty-state">
+      <div class="text-red-500 text-5xl mb-4">⚠️</div>
+      <p class="text-gray-600 mb-4">Failed to load reviews</p>
+      <button
+        @click="fetchReviews"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+      >
+        Try Again
+      </button>
+    </div>
+
     <!-- Empty State -->
     <div v-else-if="!loading && reviews.length === 0" class="empty-state">
       <p class="text-gray-500">No {{ currentStatus }} reviews found.</p>
@@ -33,16 +45,25 @@
       <div v-for="review in reviews" :key="review._id" class="review-card">
         <div class="review-header">
           <div class="user-info">
-            <div class="avatar">{{ getInitials(review.user?.name || 'Anonymous') }}</div>
+            <div class="avatar">
+              {{ getInitials(review.user?.name || "Anonymous") }}
+            </div>
             <div>
-              <div class="font-semibold">{{ review.user?.name || 'Anonymous' }}</div>
-              <div class="text-sm text-gray-500">{{ formatDate(review.createdAt) }}</div>
+              <div class="font-semibold">
+                {{ review.user?.name || "Anonymous" }}
+              </div>
+              <div class="text-sm text-gray-500">
+                {{ formatDate(review.createdAt) }}
+              </div>
             </div>
           </div>
           <div class="product-link">
-            Review for: 
-            <router-link :to="`/products/${review.product?._id}`" class="text-blue-600 hover:underline">
-              {{ review.product?.name || 'Unknown Product' }}
+            Review for:
+            <router-link
+              :to="`/products/${review.product?._id}`"
+              class="text-blue-600 hover:underline"
+            >
+              {{ review.product?.name || "Unknown Product" }}
             </router-link>
           </div>
         </div>
@@ -58,15 +79,17 @@
         </div>
 
         <div class="review-actions">
-          <template v-if="currentStatus === 'pending' || currentStatus === 'flagged'">
-            <button 
+          <template
+            v-if="currentStatus === 'pending' || currentStatus === 'flagged'"
+          >
+            <button
               @click="approveReview(review._id)"
               class="btn btn-approve"
               :disabled="processing === review._id"
             >
               Approve
             </button>
-            <button 
+            <button
               @click="rejectReview(review._id)"
               class="btn btn-reject"
               :disabled="processing === review._id"
@@ -74,8 +97,8 @@
               Reject
             </button>
           </template>
-          
-          <button 
+
+          <button
             v-if="currentStatus === 'approved'"
             @click="rejectReview(review._id)"
             class="btn btn-reject"
@@ -84,7 +107,7 @@
             Revoke Approval
           </button>
 
-          <button 
+          <button
             v-if="currentStatus === 'rejected'"
             @click="approveReview(review._id)"
             class="btn btn-approve"
@@ -97,16 +120,12 @@
 
       <!-- Pagination -->
       <div class="pagination" v-if="totalPages > 1">
-        <button 
-          @click="page--" 
-          :disabled="page === 1"
-          class="btn-page"
-        >
+        <button @click="page--" :disabled="page === 1" class="btn-page">
           Previous
         </button>
         <span>Page {{ page }} of {{ totalPages }}</span>
-        <button 
-          @click="page++" 
+        <button
+          @click="page++"
           :disabled="page === totalPages"
           class="btn-page"
         >
@@ -118,93 +137,96 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { useToast } from 'vue-toastification'
-import api from '@/utils/api'
+import api from "@/utils/api";
+import { onMounted, ref, watch } from "vue";
+import { useToast } from "vue-toastification";
 
-const toast = useToast()
-const reviews = ref([])
-const loading = ref(true)
-const currentStatus = ref('pending')
-const page = ref(1)
-const totalPages = ref(1)
-const processing = ref(null)
+const toast = useToast();
+const reviews = ref([]);
+const loading = ref(true);
+const error = ref(false);
+const currentStatus = ref("pending");
+const page = ref(1);
+const totalPages = ref(1);
+const processing = ref(null);
 
 const fetchReviews = async () => {
-  loading.value = true
+  loading.value = true;
+  error.value = false;
   try {
-    const response = await api.get('/reviews/admin/moderation-queue', {
+    const response = await api.get("/reviews/admin/moderation-queue", {
       params: {
         status: currentStatus.value,
         page: page.value,
-        limit: 20
-      }
-    })
-    reviews.value = response.data.reviews
-    totalPages.value = response.data.totalPages
-  } catch (error) {
-    console.error('Failed to fetch reviews:', error)
-    toast.error('Failed to load reviews')
+        limit: 20,
+      },
+    });
+    reviews.value = response.data.reviews || [];
+    totalPages.value = response.data.totalPages || 1;
+  } catch (err) {
+    console.error("Failed to fetch reviews:", err);
+    error.value = true;
+    toast.error("Failed to load reviews. Please try again.");
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const approveReview = async (reviewId) => {
-  processing.value = reviewId
+  processing.value = reviewId;
   try {
-    await api.post(`/reviews/admin/${reviewId}/approve`)
-    toast.success('Review approved')
-    fetchReviews()
+    await api.post(`/reviews/admin/${reviewId}/approve`);
+    toast.success("Review approved");
+    fetchReviews();
   } catch (error) {
-    toast.error('Failed to approve review')
+    toast.error("Failed to approve review");
   } finally {
-    processing.value = null
+    processing.value = null;
   }
-}
+};
 
 const rejectReview = async (reviewId) => {
-  const reason = prompt('Please enter a reason for rejection:')
-  if (!reason) return
+  const reason = prompt("Please enter a reason for rejection:");
+  if (!reason) return;
 
-  processing.value = reviewId
+  processing.value = reviewId;
   try {
-    await api.post(`/reviews/admin/${reviewId}/reject`, { reason })
-    toast.success('Review rejected')
-    fetchReviews()
+    await api.post(`/reviews/admin/${reviewId}/reject`, { reason });
+    toast.success("Review rejected");
+    fetchReviews();
   } catch (error) {
-    toast.error('Failed to reject review')
+    toast.error("Failed to reject review");
   } finally {
-    processing.value = null
+    processing.value = null;
   }
-}
+};
 
 const getInitials = (name) => {
   return name
-    .split(' ')
-    .map(word => word[0])
-    .join('')
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
     .toUpperCase()
-    .substring(0, 2)
-}
+    .substring(0, 2);
+};
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 watch([currentStatus, page], () => {
-  fetchReviews()
-})
+  fetchReviews();
+});
 
 onMounted(() => {
-  fetchReviews()
-})
+  fetchReviews();
+});
 </script>
 
 <style scoped>
@@ -222,7 +244,7 @@ onMounted(() => {
 .tabs {
   display: flex;
   gap: 8px;
-  background: #F3F4F6;
+  background: #f3f4f6;
   padding: 4px;
   border-radius: 8px;
 }
@@ -232,7 +254,7 @@ onMounted(() => {
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #6B7280;
+  color: #6b7280;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -241,11 +263,12 @@ onMounted(() => {
 
 .tab-btn.active {
   background: white;
-  color: #1F2937;
+  color: #1f2937;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.loading-state, .empty-state {
+.loading-state,
+.empty-state {
   text-align: center;
   padding: 60px 0;
 }
@@ -253,15 +276,17 @@ onMounted(() => {
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #E5E7EB;
-  border-top-color: #3B82F6;
+  border: 4px solid #e5e7eb;
+  border-top-color: #3b82f6;
   border-radius: 50%;
   margin: 0 auto 16px;
   animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .reviews-list {
@@ -271,7 +296,7 @@ onMounted(() => {
 
 .review-card {
   background: white;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 20px;
 }
@@ -292,8 +317,8 @@ onMounted(() => {
 .avatar {
   width: 40px;
   height: 40px;
-  background: #E0E7FF;
-  color: #4F46E5;
+  background: #e0e7ff;
+  color: #4f46e5;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -303,7 +328,7 @@ onMounted(() => {
 }
 
 .review-content {
-  background: #F9FAFB;
+  background: #f9fafb;
   padding: 16px;
   border-radius: 6px;
   margin-bottom: 16px;
@@ -331,12 +356,12 @@ onMounted(() => {
 }
 
 .btn-approve {
-  background: #10B981;
+  background: #10b981;
   color: white;
 }
 
 .btn-reject {
-  background: #EF4444;
+  background: #ef4444;
   color: white;
 }
 
@@ -350,7 +375,7 @@ onMounted(() => {
 
 .btn-page {
   padding: 8px 16px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   background: white;
   border-radius: 6px;
   cursor: pointer;

@@ -1,6 +1,6 @@
 import { Worker } from "bullmq";
 import { logger } from "../config/logger.js";
-import { redisConnection } from "../config/redis.js";
+import { redisClient as redisConnection } from "../config/redis.js";
 import inventoryService from "../services/inventoryService.js";
 
 /**

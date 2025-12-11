@@ -4,12 +4,16 @@
       <div class="flex justify-end items-center mb-6">
         <!-- Date Range Picker (Simplified) -->
         <div class="flex gap-2">
-          <button 
-            v-for="days in [7, 30, 90]" 
+          <button
+            v-for="days in [7, 30, 90]"
             :key="days"
             @click="fetchData(days)"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-            :class="selectedDays === days ? 'bg-green-600 text-white' : 'bg-white text-gray-600 border hover:bg-gray-50'"
+            :class="
+              selectedDays === days
+                ? 'bg-green-600 text-white'
+                : 'bg-white text-gray-600 border hover:bg-gray-50'
+            "
           >
             Last {{ days }} Days
           </button>
@@ -18,7 +22,45 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"
+        ></div>
+      </div>
+
+      <!-- Error State -->
+      <div
+        v-else-if="error"
+        class="bg-red-50 border-l-4 border-red-400 p-6 rounded-lg"
+      >
+        <div class="flex items-center">
+          <svg
+            class="h-6 w-6 text-red-400 mr-3"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <div>
+            <h3 class="text-sm font-medium text-red-800">
+              Failed to Load Analytics
+            </h3>
+            <p class="text-sm text-red-700 mt-1">
+              We couldn't load your analytics data. Please try again.
+            </p>
+          </div>
+        </div>
+        <button
+          @click="fetchData(selectedDays)"
+          class="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+        >
+          Retry
+        </button>
       </div>
 
       <div v-else class="space-y-6">
@@ -26,7 +68,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="text-sm text-gray-500 mb-1">Total Revenue</div>
-            <div class="text-2xl font-bold text-gray-900">{{ formatCurrency(summary.totalRevenue) }}</div>
+            <div class="text-2xl font-bold text-gray-900">
+              {{ formatCurrency(summary.totalRevenue) }}
+            </div>
             <div class="text-xs text-green-600 mt-2 flex items-center">
               <span class="bg-green-100 px-2 py-1 rounded-full">
                 {{ summary.totalOrders }} Orders
@@ -36,7 +80,9 @@
 
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="text-sm text-gray-500 mb-1">Conversion Rate</div>
-            <div class="text-2xl font-bold text-gray-900">{{ conversionRate }}%</div>
+            <div class="text-2xl font-bold text-gray-900">
+              {{ conversionRate }}%
+            </div>
             <div class="text-xs text-gray-500 mt-2">
               {{ summary.totalProductClicks }} clicks
             </div>
@@ -44,7 +90,9 @@
 
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="text-sm text-gray-500 mb-1">Shop Views</div>
-            <div class="text-2xl font-bold text-gray-900">{{ formatNumber(summary.totalShopViews) }}</div>
+            <div class="text-2xl font-bold text-gray-900">
+              {{ formatNumber(summary.totalShopViews) }}
+            </div>
             <div class="text-xs text-blue-600 mt-2">
               {{ formatNumber(summary.totalProductClicks) }} Product Clicks
             </div>
@@ -52,7 +100,9 @@
 
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="text-sm text-gray-500 mb-1">Avg. Order Value</div>
-            <div class="text-2xl font-bold text-gray-900">{{ formatCurrency(averageOrderValue) }}</div>
+            <div class="text-2xl font-bold text-gray-900">
+              {{ formatCurrency(averageOrderValue) }}
+            </div>
           </div>
         </div>
 
@@ -80,23 +130,26 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import VendorLayout from "@/components/layouts/VendorLayout.vue";
+import api from "@/utils/api";
+import { formatCurrency } from "@/utils/helpers";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-  Filler
-} from 'chart.js'
-import { Line, Bar } from 'vue-chartjs'
-import api from '@/utils/api'
-import { formatCurrency } from '@/utils/helpers'
-import VendorLayout from '@/components/layouts/VendorLayout.vue'
+} from "chart.js";
+import { computed, onMounted, ref } from "vue";
+import { Bar, Line } from "vue-chartjs";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 // Register ChartJS components
 ChartJS.register(
@@ -109,141 +162,166 @@ ChartJS.register(
   Tooltip,
   Legend,
   Filler
-)
+);
 
-const loading = ref(true)
-const selectedDays = ref(30)
-const chartData = ref([])
-const vendorId = ref('')
+const loading = ref(true);
+const error = ref(false);
+const selectedDays = ref(30);
+const chartData = ref([]);
+const vendorId = ref("");
 const summary = ref({
   totalRevenue: 0,
   totalOrders: 0,
   totalShopViews: 0,
-  totalProductClicks: 0
-})
+  totalProductClicks: 0,
+});
 
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   interaction: {
-    mode: 'index',
+    mode: "index",
     intersect: false,
   },
   plugins: {
     legend: {
-      position: 'top',
-    }
+      position: "top",
+    },
   },
   scales: {
     y: {
       beginAtZero: true,
       grid: {
-        color: '#f3f4f6'
-      }
+        color: "#f3f4f6",
+      },
     },
     x: {
       grid: {
-        display: false
-      }
-    }
-  }
-}
+        display: false,
+      },
+    },
+  },
+};
 
 const salesChartData = computed(() => ({
-  labels: chartData.value.map(d => formatDate(d.date)),
+  labels: chartData.value.map((d) => formatDate(d.date)),
   datasets: [
     {
-      label: 'Revenue',
-      data: chartData.value.map(d => d.revenue),
-      borderColor: '#3B82F6',
-      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+      label: "Revenue",
+      data: chartData.value.map((d) => d.revenue),
+      borderColor: "#3B82F6",
+      backgroundColor: "rgba(59, 130, 246, 0.1)",
       fill: true,
-      yAxisID: 'y',
-      tension: 0.4
+      yAxisID: "y",
+      tension: 0.4,
     },
     {
-      label: 'Orders',
-      data: chartData.value.map(d => d.orders),
-      borderColor: '#10B981',
-      backgroundColor: 'transparent',
-      yAxisID: 'y1',
+      label: "Orders",
+      data: chartData.value.map((d) => d.orders),
+      borderColor: "#10B981",
+      backgroundColor: "transparent",
+      yAxisID: "y1",
       tension: 0.4,
-      borderDash: [5, 5]
-    }
-  ]
-}))
+      borderDash: [5, 5],
+    },
+  ],
+}));
 
 const trafficChartData = computed(() => ({
-  labels: chartData.value.map(d => formatDate(d.date)),
+  labels: chartData.value.map((d) => formatDate(d.date)),
   datasets: [
     {
-      label: 'Views',
-      data: chartData.value.map(d => d.views),
-      backgroundColor: '#8B5CF6',
-      borderRadius: 4
-    }
-  ]
-}))
+      label: "Views",
+      data: chartData.value.map((d) => d.views),
+      backgroundColor: "#8B5CF6",
+      borderRadius: 4,
+    },
+  ],
+}));
 
 const conversionRate = computed(() => {
-  if (!summary.value.totalProductClicks) return 0
-  return ((summary.value.totalOrders / summary.value.totalProductClicks) * 100).toFixed(2)
-})
+  if (!summary.value.totalProductClicks) return 0;
+  return (
+    (summary.value.totalOrders / summary.value.totalProductClicks) *
+    100
+  ).toFixed(2);
+});
 
 const averageOrderValue = computed(() => {
-  if (!summary.value.totalOrders) return 0
-  return summary.value.totalRevenue / summary.value.totalOrders
-})
+  if (!summary.value.totalOrders) return 0;
+  return summary.value.totalRevenue / summary.value.totalOrders;
+});
 
 const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date)
-}
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+  }).format(date);
+};
 
 const formatNumber = (num) => {
-  return new Intl.NumberFormat('en-US', { notation: "compact", compactDisplay: "short" }).format(num || 0)
-}
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    compactDisplay: "short",
+  }).format(num || 0);
+};
 
 const fetchData = async (days) => {
-  loading.value = true
-  selectedDays.value = days
-  
+  loading.value = true;
+  error.value = false;
+  selectedDays.value = days;
+
   try {
-    const endDate = new Date()
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() - days)
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
 
     // Fetch profile to get Vendor ID for debug
     try {
-        const profileRes = await api.get('/vendor/profile')
-        vendorId.value = profileRes.data.vendor._id
+      const profileRes = await api.get("/vendor/profile");
+      vendorId.value = profileRes.data.vendor._id;
     } catch (e) {
-        console.error('Failed to fetch profile', e)
+      console.error("Failed to fetch profile", e);
     }
 
     const [chartRes, summaryRes] = await Promise.all([
-      api.get('/vendor/analytics/chart', {
+      api.get('/vendor/stats/chart', {
         params: {
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString()
         }
       }),
-      api.get('/vendor/analytics/summary', {
+      api.get('/vendor/stats/summary', {
         params: { days }
       })
     ])
 
-    chartData.value = chartRes.data.sort((a, b) => new Date(a.date) - new Date(b.date))
-    summary.value = summaryRes.data
-    console.log('Analytics Data:', { chart: chartRes.data, summary: summaryRes.data })
-  } catch (error) {
-    console.error('Failed to fetch analytics:', error)
+    // Handle response - ensure data is an array
+    const chartDataArray = Array.isArray(chartRes.data) ? chartRes.data : [];
+    chartData.value = chartDataArray.sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
+    summary.value = summaryRes.data || {
+      totalRevenue: 0,
+      totalOrders: 0,
+      totalShopViews: 0,
+      totalProductClicks: 0
+    };
+    console.log("Analytics Data:", {
+      chart: chartData.value,
+      summary: summary.value,
+    });
+  } catch (err) {
+    console.error("Failed to fetch analytics:", err);
+    error.value = true;
+    toast.error("Failed to load analytics data. Please try again.");
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 onMounted(() => {
-  fetchData(30)
-})
+  fetchData(30);
+});
 </script>

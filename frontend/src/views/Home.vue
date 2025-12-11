@@ -2,41 +2,60 @@
   <DefaultLayout>
     <!-- Hero Section -->
     <section
-      class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20"
+      class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-24"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <h1 class="text-4xl md:text-6xl font-bold mb-4">
+          <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
             Welcome to ShopSite
           </h1>
-          <p class="text-xl md:text-2xl mb-8">
+          <p class="text-xl md:text-3xl mb-4 font-light">
             Discover amazing products at unbeatable prices
           </p>
-          <router-link
-            to="/products"
-            class="btn bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-3"
-          >
-            Shop Now
-          </router-link>
+          <p class="text-lg md:text-xl mb-10 text-blue-100">
+            Shop from thousands of products with fast delivery & secure payment
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <router-link
+              to="/products"
+              class="btn bg-white text-blue-600 hover:bg-gray-100 text-lg px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition"
+            >
+              🛍️ Shop Now
+            </router-link>
+            <router-link
+              to="/products?sort=newest"
+              class="btn bg-blue-700 hover:bg-blue-600 text-white border-2 border-white text-lg px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition"
+            >
+              ✨ New Arrivals
+            </router-link>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Featured Categories -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-20 bg-gray-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
-          Shop by Category
-        </h2>
+        <div class="text-center mb-12">
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Shop by Category
+          </h2>
+          <p class="text-xl text-gray-600">
+            Browse our wide selection of products
+          </p>
+        </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div
             v-for="category in categories"
             :key="category.name"
             @click="goToCategory(category.slug)"
-            class="bg-white rounded-lg shadow-md p-6 text-center cursor-pointer hover:shadow-xl transition-shadow"
+            class="bg-white rounded-2xl shadow-md p-8 text-center cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border-2 border-transparent hover:border-blue-500"
           >
-            <div class="text-4xl mb-3">{{ category.icon }}</div>
-            <h3 class="font-semibold text-gray-900">{{ category.name }}</h3>
+            <div class="text-6xl mb-4">
+              {{ category.icon }}
+            </div>
+            <h3 class="font-bold text-lg text-gray-900">{{ category.name }}</h3>
+            <p class="text-sm text-gray-500 mt-1">Explore →</p>
           </div>
         </div>
       </div>
@@ -111,23 +130,50 @@
     </section>
 
     <!-- Features Section -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-20 bg-white border-t border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="text-center">
-            <div class="text-blue-600 text-5xl mb-4">🚚</div>
-            <h3 class="text-xl font-semibold mb-2">Free Shipping</h3>
-            <p class="text-gray-600">On orders over $50</p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="text-center p-6">
+            <div
+              class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 text-3xl mb-4"
+            >
+              🚚
+            </div>
+            <h3 class="text-lg font-bold mb-2 text-gray-900">Fast Delivery</h3>
+            <p class="text-gray-600 text-sm">
+              Quick & reliable shipping to your doorstep
+            </p>
           </div>
-          <div class="text-center">
-            <div class="text-blue-600 text-5xl mb-4">🔒</div>
-            <h3 class="text-xl font-semibold mb-2">Secure Payment</h3>
-            <p class="text-gray-600">100% secure transactions</p>
+          <div class="text-center p-6">
+            <div
+              class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 text-3xl mb-4"
+            >
+              🔒
+            </div>
+            <h3 class="text-lg font-bold mb-2 text-gray-900">Secure Payment</h3>
+            <p class="text-gray-600 text-sm">
+              100% secure & encrypted transactions
+            </p>
           </div>
-          <div class="text-center">
-            <div class="text-blue-600 text-5xl mb-4">↩️</div>
-            <h3 class="text-xl font-semibold mb-2">Easy Returns</h3>
-            <p class="text-gray-600">30-day return policy</p>
+          <div class="text-center p-6">
+            <div
+              class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-100 text-purple-600 text-3xl mb-4"
+            >
+              ↩️
+            </div>
+            <h3 class="text-lg font-bold mb-2 text-gray-900">Easy Returns</h3>
+            <p class="text-gray-600 text-sm">
+              Hassle-free 30-day return policy
+            </p>
+          </div>
+          <div class="text-center p-6">
+            <div
+              class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 text-orange-600 text-3xl mb-4"
+            >
+              💬
+            </div>
+            <h3 class="text-lg font-bold mb-2 text-gray-900">24/7 Support</h3>
+            <p class="text-gray-600 text-sm">Dedicated customer service team</p>
           </div>
         </div>
       </div>
@@ -204,19 +250,23 @@ async function addToCart(productId) {
     await cartStore.addToCart(productId, 1);
     console.log("Successfully added to cart");
   } catch (error) {
-    console.error("Add to cart failed:", error.response?.status, error.response?.data);
+    console.error(
+      "Add to cart failed:",
+      error.response?.status,
+      error.response?.data
+    );
   }
 }
 
 const getProductImage = (product) => {
   if (product.images && product.images.length > 0) {
     const img = product.images[0];
-    const url = typeof img === 'string' ? img : img.url;
-    if (url && url.startsWith('/')) {
-      return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${url}`;
+    const url = typeof img === "string" ? img : img.url;
+    if (url && url.startsWith("/")) {
+      return `${import.meta.env.VITE_API_URL || "http://localhost:5000"}${url}`;
     }
     return url;
   }
-  return 'data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\' viewBox=\'0 0 200 200\'%3e%3crect width=\'200\' height=\'200\' fill=\'%23e5e7eb\'/%3e%3cpath d=\'M100 100l-20 20h40l-20-20z\' fill=\'%239ca3af\'/%3e%3ctext x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'14\' fill=\'%236b7280\'>No Image</text>%3c/svg%3e';
+  return "data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3e%3crect width='200' height='200' fill='%23e5e7eb'/%3e%3cpath d='M100 100l-20 20h40l-20-20z' fill='%239ca3af'/%3e%3ctext x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%236b7280'>No Image</text>%3c/svg%3e";
 };
 </script>

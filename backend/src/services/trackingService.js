@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logger } from "../config/logger.js";
 import Order from "../models/Order.js";
-import { sendOrderStatusUpdate } from "./emailService.js";
+import emailService from "./emailService.js";
 
 /**
  * Shipping Tracking Service
@@ -106,7 +106,7 @@ class TrackingService {
       );
 
       // Send email notification to customer
-      await sendOrderStatusUpdate(order.user, order);
+      await emailService.sendOrderStatusUpdate(order.user, order);
 
       // Fetch initial tracking data if API is available
       if (carrier.enabled && trackingData.fetchTracking !== false) {
@@ -189,9 +189,9 @@ class TrackingService {
       const tokenResponse = await axios.post(
         "https://apis.fedex.com/oauth/token",
         "grant_type=client_credentials&client_id=" +
-          config.apiKey +
-          "&client_secret=" +
-          config.apiSecret,
+        config.apiKey +
+        "&client_secret=" +
+        config.apiSecret,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -319,9 +319,8 @@ class TrackingService {
       data?.trackResults?.[0]?.scanEvents?.map((event) => ({
         timestamp: new Date(event.date),
         status: event.eventDescription,
-        location: `${event.scanLocation?.city || ""}, ${
-          event.scanLocation?.stateOrProvinceCode || ""
-        }`,
+        location: `${event.scanLocation?.city || ""}, ${event.scanLocation?.stateOrProvinceCode || ""
+          }`,
         description: event.eventDescription,
         carrier: "fedex",
       })) || [];
@@ -341,9 +340,8 @@ class TrackingService {
         (activity) => ({
           timestamp: new Date(activity.date),
           status: activity.status?.description,
-          location: `${activity.location?.address?.city || ""}, ${
-            activity.location?.address?.stateProvinceCode || ""
-          }`,
+          location: `${activity.location?.address?.city || ""}, ${activity.location?.address?.stateProvinceCode || ""
+            }`,
           description: activity.status?.description,
           carrier: "ups",
         })
@@ -430,7 +428,7 @@ class TrackingService {
 
           // Send delivery notification
           const user = await order.populate("user");
-          await sendOrderStatusUpdate(user.user, order);
+          await emailService.sendOrderStatusUpdate(user.user, order);
         }
 
         await order.save();

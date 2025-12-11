@@ -1,0 +1,96 @@
+
+
+services:
+  # Frontend Service (Vue.js + Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: shopping-site-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - shopping-network
+
+  # Backend Service (Node.js API)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: shopping-site-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://admin:admin123@mongodb:27017/shopping_site?authSource=admin
+      - REDIS_URL=redis://redis:6379
+      - FRONTEND_URL=http://localhost:3000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./backend/uploads:/usr/src/app/uploads
+      - ./backend/logs:/usr/src/app/logs
+    networks:
+      - shopping-network
+
+  # Worker Service (Background Jobs)
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: shopping-site-worker
+    restart: unless-stopped
+    command: node src/worker.js
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://admin:admin123@mongodb:27017/shopping_site?authSource=admin
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - shopping-network
+
+  # Database (MongoDB)
+  mongodb:
+    image: mongo:7.0
+    container_name: shopping-site-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - shopping-network
+
+  # Cache (Redis)
+  redis:
+    image: redis:7-alpine
+    container_name: shopping-site-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - shopping-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  shopping-network:
+    driver: bridge

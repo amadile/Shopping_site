@@ -41,54 +41,42 @@ onUnmounted(() => {
 <style>
 /* Global styles will be loaded from assets/main.css */
 
-/* Professional Page Transitions */
+/* Professional Page Transitions - Subtle and Fast */
 
-/* Fade Transition (Default) */
+/* Fade Transition (Default) - Minimal, professional */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.15s ease;
 }
 
 .fade-enter-from {
   opacity: 0;
-  transform: translateY(10px);
 }
 
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
 }
 
-/* Slide Transition */
+/* Slide Transition - Removed for professional look */
 .slide-enter-active,
 .slide-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.15s ease;
 }
 
-.slide-enter-from {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
+.slide-enter-from,
 .slide-leave-to {
   opacity: 0;
-  transform: translateX(-30px);
 }
 
-/* Scale Transition */
+/* Scale Transition - Removed for professional look */
 .scale-enter-active,
 .scale-leave-active {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity 0.15s ease;
 }
 
-.scale-enter-from {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
+.scale-enter-from,
 .scale-leave-to {
   opacity: 0;
-  transform: scale(1.05);
 }
 
 /* Smooth scroll behavior */
@@ -108,12 +96,7 @@ html {
 
 .skeleton {
   animation: shimmer 2s infinite linear;
-  background: linear-gradient(
-    to right,
-    #f0f0f0 4%,
-    #e0e0e0 25%,
-    #f0f0f0 36%
-  );
+  background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
   background-size: 1000px 100%;
 }
 
@@ -145,4 +128,3 @@ img[loading="lazy"].loaded {
   opacity: 1;
 }
 </style>
-

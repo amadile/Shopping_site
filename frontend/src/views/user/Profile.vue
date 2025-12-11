@@ -1,7 +1,70 @@
 <template>
   <CustomerLayout>
     <div class="space-y-6">
-      <h1 class="text-3xl font-bold mb-8">My Profile</h1>
+      <!-- Profile Header -->
+      <div
+        class="bg-gradient-to-r from-primary to-primary-dark rounded-lg p-6 text-white"
+      >
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-4xl font-bold mb-2">My Profile</h1>
+            <p class="text-blue-100">
+              Manage your account information and preferences
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="text-5xl mb-2">👤</div>
+            <div
+              class="bg-white/20 backdrop-blur rounded-full px-4 py-1 text-sm"
+            >
+              {{ user?.role || "Customer" }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div
+          class="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Total Orders</p>
+              <p class="text-3xl font-bold text-blue-600">
+                {{ totalOrders || 0 }}
+              </p>
+            </div>
+            <div class="text-4xl">📦</div>
+          </div>
+        </div>
+        <div
+          class="card bg-gradient-to-br from-green-50 to-green-100 border-green-200"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Completed Orders</p>
+              <p class="text-3xl font-bold text-green-600">
+                {{ completedOrders || 0 }}
+              </p>
+            </div>
+            <div class="text-4xl">✅</div>
+          </div>
+        </div>
+        <div
+          class="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Profile Score</p>
+              <p class="text-3xl font-bold text-purple-600">
+                {{ profileCompleteness }}%
+              </p>
+            </div>
+            <div class="text-4xl">⭐</div>
+          </div>
+        </div>
+      </div>
 
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
@@ -239,7 +302,7 @@
 import CustomerLayout from "@/components/layouts/CustomerLayout.vue";
 import { useAuthStore } from "@/stores/auth";
 import { formatDate } from "@/utils/helpers";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 
@@ -274,6 +337,21 @@ const passwordForm = ref({
   currentPassword: "",
   newPassword: "",
   confirmPassword: "",
+});
+
+// Computed properties for stats
+const user = computed(() => authStore.user);
+const totalOrders = ref(0);
+const completedOrders = ref(0);
+
+const profileCompleteness = computed(() => {
+  if (!authStore.user) return 0;
+  let score = 0;
+  if (authStore.user.name) score += 25;
+  if (authStore.user.email) score += 25;
+  if (authStore.user.phone) score += 25;
+  if (authStore.user.shippingAddress?.addressLine1) score += 25;
+  return score;
 });
 
 // Load profile data

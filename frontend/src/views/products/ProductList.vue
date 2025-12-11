@@ -3,54 +3,98 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-4">Products</h1>
+        <h1 class="text-4xl font-bold mb-2">All Products</h1>
+        <p class="text-gray-600 text-lg mb-6">
+          Discover our wide range of quality products
+        </p>
 
         <!-- Search and Filters -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
-          <!-- Search -->
-          <div class="flex-1">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search products..."
-              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              @input="debouncedSearch"
-            />
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <div class="flex flex-col md:flex-row gap-4 mb-4">
+            <!-- Search -->
+            <div class="flex-1">
+              <label class="text-sm font-medium text-gray-700 mb-2 block"
+                >Search Products</label
+              >
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search by name, description..."
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                @input="debouncedSearch"
+              />
+            </div>
+
+            <!-- Category Filter -->
+            <div class="md:w-48">
+              <label class="text-sm font-medium text-gray-700 mb-2 block"
+                >Category</label
+              >
+              <select
+                v-model="selectedCategory"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                @change="filterProducts"
+              >
+                <option value="">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="books">Books</option>
+                <option value="home">Home & Garden</option>
+                <option value="sports">Sports</option>
+                <option value="toys">Toys</option>
+              </select>
+            </div>
+
+            <!-- Sort -->
+            <div class="md:w-48">
+              <label class="text-sm font-medium text-gray-700 mb-2 block"
+                >Sort By</label
+              >
+              <select
+                v-model="sortBy"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                @change="filterProducts"
+              >
+                <option value="name">Name (A-Z)</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="newest">Newest First</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Category Filter -->
-          <select
-            v-model="selectedCategory"
-            class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            @change="filterProducts"
+          <!-- Active Filters & Results -->
+          <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
           >
-            <option value="">All Categories</option>
-            <option value="electronics">Electronics</option>
-            <option value="clothing">Clothing</option>
-            <option value="books">Books</option>
-            <option value="home">Home & Garden</option>
-            <option value="sports">Sports</option>
-            <option value="toys">Toys</option>
-          </select>
-
-          <!-- Sort -->
-          <select
-            v-model="sortBy"
-            class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            @change="filterProducts"
-          >
-            <option value="name">Name</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="rating">Rating</option>
-            <option value="newest">Newest</option>
-          </select>
+            <p class="text-gray-600 text-sm">
+              Showing
+              <span class="font-semibold">{{ products.length }}</span> of
+              <span class="font-semibold">{{ totalProducts }}</span> products
+            </p>
+            <button
+              v-if="searchQuery || selectedCategory || sortBy !== 'name'"
+              @click="resetFilters"
+              class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Clear All Filters
+            </button>
+          </div>
         </div>
-
-        <!-- Results Count -->
-        <p class="text-gray-600">
-          Showing {{ products.length }} of {{ totalProducts }} products
-        </p>
       </div>
 
       <!-- Loading State -->
@@ -70,11 +114,36 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="products.length === 0" class="text-center py-12">
-        <p class="text-gray-600 mb-4">No products found</p>
-        <button @click="resetFilters" class="btn btn-primary">
-          Clear Filters
-        </button>
+      <div v-else-if="products.length === 0" class="text-center py-20">
+        <svg
+          class="w-24 h-24 mx-auto text-gray-300 mb-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">No Products Found</h2>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+          We couldn't find any products matching your criteria. Try adjusting
+          your filters or search terms.
+        </p>
+        <div class="flex justify-center gap-4">
+          <button @click="resetFilters" class="btn btn-primary px-8">
+            Clear All Filters
+          </button>
+          <button
+            @click="() => router.push('/')"
+            class="btn btn-secondary px-8"
+          >
+            Back to Home
+          </button>
+        </div>
       </div>
 
       <!-- Product Grid -->
@@ -133,8 +202,16 @@
             <div class="flex items-center mb-2">
               <div class="text-yellow-500 text-sm">
                 <span v-for="n in 5" :key="n">
-                  <span v-if="n <= Math.floor(product.averageRating || 0)">★</span>
-                  <span v-else-if="n === Math.ceil(product.averageRating || 0) && (product.averageRating || 0) % 1 >= 0.5">★</span>
+                  <span v-if="n <= Math.floor(product.averageRating || 0)"
+                    >★</span
+                  >
+                  <span
+                    v-else-if="
+                      n === Math.ceil(product.averageRating || 0) &&
+                      (product.averageRating || 0) % 1 >= 0.5
+                    "
+                    >★</span
+                  >
                   <span v-else class="text-gray-300">★</span>
                 </span>
               </div>
@@ -343,9 +420,9 @@ const addToCart = async (product) => {
 const getProductImage = (product) => {
   if (product.images && product.images.length > 0) {
     const img = product.images[0];
-    const url = typeof img === 'string' ? img : img.url;
-    if (url && url.startsWith('/')) {
-      return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${url}`;
+    const url = typeof img === "string" ? img : img.url;
+    if (url && url.startsWith("/")) {
+      return `${import.meta.env.VITE_API_URL || "http://localhost:5000"}${url}`;
     }
     return url;
   }
